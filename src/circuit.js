@@ -25,9 +25,9 @@ class Node {
             case 'not':
                 ctx.beginPath();
                 ctx.arc(this.x - 0.08*scale, this.y, 0.08*scale, 0, 2*Math.PI);
-                ctx.moveTo(this.x - 0.08*scale, this.y);
-                ctx.lineTo(this.x - 0.08*scale - 0.7*Math.sqrt(3)/2*scale, this.y + 0.7/2*scale);
-                ctx.lineTo(this.x - 0.08*scale - 0.7*Math.sqrt(3)/2*scale, this.y - 0.7/2*scale);
+                ctx.moveTo(this.x - 0.16*scale, this.y);
+                ctx.lineTo(this.x - 0.16*scale - 0.7*Math.sqrt(3)/2*scale, this.y + 0.7/2*scale);
+                ctx.lineTo(this.x - 0.16*scale - 0.7*Math.sqrt(3)/2*scale, this.y - 0.7/2*scale);
                 ctx.closePath();
                 ctx.stroke();
                 break;
