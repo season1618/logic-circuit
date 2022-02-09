@@ -1,4 +1,4 @@
-import { Node, canvas, cir, scale } from './circuit.js';
+import { Node, canvas, cir, scale, ctx } from './circuit.js';
 
 let DEFAULT = 0;
 let LOGIC_GATE_MOVE = 1;
@@ -11,6 +11,7 @@ let WIRING_THIRD = 6;
 let ACTIVE_GATE = -1;
 
 let state = DEFAULT;
+let refPos = [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }];
 
 canvas.addEventListener(
     'mousedown',
@@ -21,7 +22,11 @@ canvas.addEventListener(
                 let y = e.clientY;
                 for(let i = 0; i < cir.length; i++){
                     if(Math.sqrt((x - cir[i].x)**2 + (y - cir[i].y)**2) < 0.2*scale){
+                        refPos[0].x = cir[i].x;
+                        refPos[0].y = cir[i].y;
+                        ACTIVE_GATE = i;
                         state = WIRING_FIRST;
+                        break;
                     }
                     if(cir[i].x - scale < x && x < cir[i].x && Math.abs(y - cir[i].y) < 0.4*scale){
                         ACTIVE_GATE = i;
@@ -43,6 +48,47 @@ canvas.addEventListener(
                 cir.render();
                 break;
             case WIRING_FIRST:
+                if(Math.abs(e.clientY - refPos[0].y) < 0.4 * scale){
+                    cir.render();
+                    ctx.beginPath();
+                    ctx.moveTo(refPos[0].x, refPos[0].y);
+                    ctx.lineTo(e.clientX, refPos[0].y);
+                    ctx.stroke();
+                }else{
+                    refPos[1].x = e.clientX;
+                    refPos[1].y = refPos[0].y;
+                    state = WIRING_SECOND;
+                }
+                break;
+            case WIRING_SECOND:
+                if(Math.abs(e.clientX - refPos[1].x) < 0.4 * scale){
+                    cir.render();
+                    ctx.beginPath();
+                    ctx.moveTo(refPos[0].x, refPos[0].y);
+                    ctx.lineTo(refPos[1].x, refPos[1].y);
+                    ctx.lineTo(refPos[1].x, e.clientY);
+                    ctx.stroke();
+                }else{
+                    refPos[2].x = refPos[1].x;
+                    refPos[2].y = e.clientY;
+                    state = WIRING_THIRD;
+                }
+                break;
+            case WIRING_THIRD:
+                for(let i = 0; i < cir.length; i++){
+                    if(cir[i].x - scale < e.clientX && e.clientX < cir[i].x && Math.abs(refPos[2].y - cir[i].y) < 0.4*scale){
+                        cir.input[i].push(ACTIVE_GATE);
+                        state = DEFAULT;
+                        return;
+                    }
+                }
+                cir.render();
+                ctx.beginPath();
+                ctx.moveTo(refPos[0].x, refPos[0].y);
+                ctx.lineTo(refPos[1].x, refPos[1].y);
+                ctx.lineTo(refPos[2].x, refPos[2].y);
+                ctx.lineTo(e.clientX, refPos[2].y);
+                ctx.stroke();
                 break;
         }
     }
@@ -54,11 +100,16 @@ canvas.addEventListener(
             case LOGIC_GATE_MOVE:
                 state = DEFAULT;
                 break;
+            case WIRING_FIRST:
+            case WIRING_SECOND:
+            case WIRING_THIRD:
+                cir.render();
+                state = DEFAULT;
+                break;
         }
     }
 );
 
-let posX, posY;
 let newLogicGate;
 let num;
 canvas.addEventListener(
@@ -66,10 +117,8 @@ canvas.addEventListener(
     function(e){
         if(state == DEFAULT){
             state = LOGIC_GATE_ADD;
-            posX = e.clientX;
-            posY = e.clientY;
             num = 0;
-            newLogicGate = new Node('and', 0, posX, posY);
+            newLogicGate = new Node('and', 0, e.clientX, e.clientY);
             newLogicGate.render();
         }
     }
