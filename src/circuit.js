@@ -18,6 +18,12 @@ class Node {
     //         this.depth = max(this.depth, this.input[i].depth);
     //     }
     // }
+    include(x, y){
+        if(this.x - scale < x && x < this.x && Math.abs(y - this.y) < 0.4*scale){
+            console.log('hello');
+            return true;
+        }else return false;
+    }
     calcValue(){
     }
     render(){

@@ -50,7 +50,7 @@ canvas.addEventListener(
             case WIRING_FIRST:
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
-                    if(cir[i].x - scale < e.clientX && e.clientX < cir[i].x && Math.abs(refPos[0].y - cir[i].y) < 0.4*scale){
+                    if(cir[i].x - scale < e.clientX && e.clientX < cir[i].x && Math.abs(refPos[0].y - this.y) < 0.4*scale){
                         cir.input[i].push(ACTIVE_GATE);
                         state = DEFAULT;
                         return;
@@ -85,7 +85,7 @@ canvas.addEventListener(
             case WIRING_THIRD:
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
-                    if(cir[i].x - scale < e.clientX && e.clientX < cir[i].x && Math.abs(refPos[2].y - cir[i].y) < 0.4*scale){
+                    if(cir[i].include(e.clientX, refPos[2])){
                         cir.input[i].push(ACTIVE_GATE);
                         state = DEFAULT;
                         return;
