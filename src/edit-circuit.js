@@ -28,7 +28,7 @@ canvas.addEventListener(
                         state = WIRING_FIRST;
                         break;
                     }
-                    if(cir[i].x - scale < x && x < cir[i].x && Math.abs(y - cir[i].y) < 0.4*scale){
+                    if(cir[i].include(e.clientX, e.clientY)){
                         ACTIVE_GATE = i;
                         state = LOGIC_GATE_MOVE;
                         break;
@@ -50,7 +50,7 @@ canvas.addEventListener(
             case WIRING_FIRST:
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
-                    if(cir[i].x - scale < e.clientX && e.clientX < cir[i].x && Math.abs(refPos[0].y - this.y) < 0.4*scale){
+                    if(cir[i].include(e.clientX, refPos[0].y)){
                         cir.input[i].push(ACTIVE_GATE);
                         state = DEFAULT;
                         return;
@@ -85,7 +85,7 @@ canvas.addEventListener(
             case WIRING_THIRD:
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
-                    if(cir[i].include(e.clientX, refPos[2])){
+                    if(cir[i].include(e.clientX, refPos[2].y)){
                         cir.input[i].push(ACTIVE_GATE);
                         state = DEFAULT;
                         return;
