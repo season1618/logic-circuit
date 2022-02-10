@@ -32,3 +32,40 @@ button {
 
     margin-top: 5px;
 }
+
+table {
+    display: block;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    max-height: 240px;
+    
+    resize: block;
+    overflow-y: scroll;
+
+    border: 1px solid;
+    border-spacing: 0;
+
+    
+}
+
+/* tbody {
+    white-space: nowrap;
+} */
+
+th, td {
+    width: 50px;
+    border: 1px solid;
+    text-align: center;
+
+    /* border-top-width: 0;
+    border-left-width: 0; */
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background: white;
+}
