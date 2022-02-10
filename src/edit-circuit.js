@@ -127,7 +127,7 @@ canvas.addEventListener(
         if(state == DEFAULT){
             state = LOGIC_GATE_ADD;
             num = 0;
-            newLogicGate = new Node('and', 0, e.clientX, e.clientY);
+            newLogicGate = new Node('and', e.clientX, e.clientY);
             newLogicGate.render();
         }
     }
