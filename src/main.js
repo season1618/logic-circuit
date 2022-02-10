@@ -1,4 +1,4 @@
-import { canvas, ctx, cir } from './circuit.js';
+import { cir } from './circuit.js';
 import './edit-circuit.js';
 
 let alignButton = document.getElementById('align');

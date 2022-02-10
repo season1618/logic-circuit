@@ -1,4 +1,5 @@
-import { Node, canvas, cir, scale, ctx } from './circuit.js';
+import { canvas, ctx, scale } from './canvas.js';
+import { Node, cir } from './circuit.js';
 
 let DEFAULT = 0;
 let LOGIC_GATE_MOVE = 1;

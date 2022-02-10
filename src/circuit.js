@@ -1,9 +1,4 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = document.documentElement.clientWidth;
-canvas.height = document.documentElement.clientHeight;
-
-var scale = 100;
+import { ctx, scale } from './canvas.js';
 
 class Node {
     constructor(kind, value, x, y){
@@ -188,4 +183,4 @@ const cir = new Circuit(
 cir[2].input.push(cir[0], cir[1]);
 cir[3].input.push(cir[0], cir[1]);
 
-export { Node, canvas, ctx, cir, scale };
+export { Node, cir };
