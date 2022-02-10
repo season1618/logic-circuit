@@ -1,12 +1,13 @@
 import { ctx, scale } from './canvas.js';
 
 class Node {
-    constructor(kind, value, x, y){
+    constructor(kind, x, y){
         this.kind = kind;
-        this.value = value;
         this.x = x;
         this.y = y;
         this.input = [];
+
+        this.value = 0;
         this.depth = 0;
         this.isVisited = false;
     }
@@ -174,10 +175,10 @@ class Circuit extends Array {
 
 const cir = new Circuit(
     [
-        new Node('in', 0, 100, 100),
-        new Node('in', 1, 100, 200),
-        new Node('and', 0, 300, 100),
-        new Node('or', 0, 300, 200)
+        new Node('in', 100, 100),
+        new Node('in', 100, 200),
+        new Node('and', 300, 100),
+        new Node('or', 300, 200)
     ]
 );
 cir[2].input.push(cir[0], cir[1]);
