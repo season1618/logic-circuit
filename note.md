@@ -9,9 +9,7 @@ http://www.setsunan.ac.jp/~shikama/LogicCircuits2009/2014LCB_8.pdf
 
 論理ゲートの深さ(depth)を
 - 入力: 0
-- not: 入力となる論理ゲートのdepthの最大値 + 1
-- and, or: 入力となる論理ゲートのdepth + 1(not), depth(and, or)の最大値 + 1
-と定義する。
+- その他: 入力となる論理ゲートのdepthの最大値 + 1
 
 同じ深さの論理ゲートを縦一列に等間隔に配置する。隣り合う列も等間隔に並べる。
 同じ論理ゲートに入力される配線が交差しないようにする。Nodeのinputをyの昇順にソートする。

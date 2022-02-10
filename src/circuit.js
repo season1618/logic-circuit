@@ -92,8 +92,7 @@ class Circuit extends Array {
                 dfs(u)
                 v.depth = Math.max(v.depth, u.depth);
             }
-            if(v.kind == 'not') v.depth = Math.floor((v.depth + 1) / 2) * 2 + 1;
-            else v.depth = Math.floor(v.depth / 2) * 2 + 2;
+            v.depth++;
         }
         for(let i = 0; i < this.length; i++){
             this[i].isVisited = false;
