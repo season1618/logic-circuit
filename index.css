@@ -13,5 +13,22 @@ body {
     font-weight: lighter;
 }
 
-canvas {
+#operate {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+}
+button {
+    box-sizing: border-box;
+    width: 100px;
+
+    border-radius: 2rem;
+    border-width: thin;
+    background-color: transparent;
+
+    font-family: 'Yu Gothic Light', sans-serif;
+    font-size: 1.5rem;
+    font-weight: lighter;
+
+    margin-top: 5px;
 }

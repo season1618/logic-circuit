@@ -9,19 +9,41 @@ class Node {
     constructor(kind, value, x, y){
         this.kind = kind;
         this.value = value;
-        this.depth = 0;
         this.x = x;
         this.y = y;
         this.input = [];
+        this.depth = 0;
+        this.isVisited = false;
     }
-    // calcDepth(){
-    //     for(let i = 0; i < this.input.length; i++){
-    //         this.depth = max(this.depth, this.input[i].depth);
-    //     }
-    // }
     include(x, y){
         if(this.x - scale < x && x < this.x && Math.abs(y - this.y) < 0.4*scale) return true;
         else return false;
+    }
+    sort(l = 0, r = this.input.length){
+        if(l + 1 >= r) return;
+        let m = Math.floor((l + r) / 2);
+        this.sort(l, m);
+        this.sort(m, r);
+        let tempArray = new Array(r - l);
+        let i = l, j = m;
+        for(let k = 0; k < r - l; k++){
+            if(i == m){
+                tempArray[k] = this.input[j];
+                j++;
+            }else if(j == r){
+                tempArray[k] = this.input[i];
+                i++;
+            }else if(this.input[i].y < this.input[j].y){
+                tempArray[k] = this.input[i];
+                i++;
+            }else{
+                tempArray[k] = this.input[j];
+                j++;
+            }
+        }
+        for(let k = 0; k < r - l; k++){
+            this.input[l + k] = tempArray[k];
+        }
     }
     calcValue(){
     }
@@ -61,19 +83,78 @@ class Node {
 class Circuit extends Array {
     constructor(nodeArray){
         super(...nodeArray);
-        this.h = 100;
-        this.w = 10;
-        this.depthCount;
     }
     calcDepth(){
-        len = this.length;
-        visits = new Array(len).fill(0);
-        for(let i = 0; i < len; i++){
-            if(visits[i] == 0){
-                this[i].calcDepth();
-                visits[i] = 1;
+        function dfs(v){
+            if(v.isVisited) return;
+            v.isVisited = true;
+            if(v.kind == 'in'){
+                v.depth = 0;
+                return;
+            }
+            for(let u of v.input){
+                dfs(u)
+                v.depth = Math.max(v.depth, u.depth);
+            }
+            if(v.kind == 'not') v.depth = Math.floor((v.depth + 1) / 2) * 2 + 1;
+            else v.depth = Math.floor(v.depth / 2) * 2 + 2;
+        }
+        for(let i = 0; i < this.length; i++){
+            this[i].isVisited = false;
+            this[i].depth = 0;
+        }
+        for(let i = 0; i < this.length; i++){
+            if(!this[i].isVisited){
+                dfs(this[i]);
             }
         }
+    }
+    sort(l = 0, r = this.length){
+        if(l + 1 >= r) return;
+        let m = Math.floor((l + r) / 2);
+        this.sort(l, m);
+        this.sort(m, r);
+        let tempArray = new Array(r - l);
+        let i = l, j = m;
+        for(let k = 0; k < r - l; k++){
+            if(i == m){
+                tempArray[k] = this[j];
+                j++;
+            }else if(j == r){
+                tempArray[k] = this[i];
+                i++;
+            }else if(this[i].depth < this[j].depth || this[i].depth == this[j].depth && this[i].y < this[j].y){
+                tempArray[k] = this[i];
+                i++;
+            }else{
+                tempArray[k] = this[j];
+                j++;
+            }
+        }
+        for(let k = 0; k < r - l; k++){
+            this[l + k] = tempArray[k];
+        }
+    }
+    align(){
+        for(let i = 0; i < this.length; i++) this[i].sort();
+        this.calcDepth();
+        this.sort();
+        let numDepth = new Array(100).fill(0);
+        let maxDepth = 0;
+        for(let i = 0; i < this.length; i++){
+            numDepth[this[i].depth]++;
+            maxDepth = Math.max(maxDepth, numDepth[this[i].depth]);
+        }
+        let H = 2*scale, W = 2*scale;
+        let k = 0;
+        for(let i = 0; i < this.length; i++){
+            let n = numDepth[this[i].depth];
+            this[i].x = (this[i].depth + 1) * W;
+            this[i].y = (k + 1) * H - (n+1)/2*H + (maxDepth+1)/2*H;
+            k++;
+            if(k == n) k = 0;
+        }console.log(this);
+        this.render();
     }
     render(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
