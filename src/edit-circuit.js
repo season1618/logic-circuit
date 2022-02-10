@@ -3,10 +3,9 @@ import { Node, canvas, cir, scale, ctx } from './circuit.js';
 let DEFAULT = 0;
 let LOGIC_GATE_MOVE = 1;
 let LOGIC_GATE_ADD = 2;
-let WIRING = 3;
-let WIRING_FIRST = 4;
-let WIRING_SECOND = 5;
-let WIRING_THIRD = 6;
+let WIRING_FIRST = 3;
+let WIRING_SECOND = 4;
+let WIRING_THIRD = 5;
 
 let ACTIVE_GATE = -1;
 
@@ -51,7 +50,7 @@ canvas.addEventListener(
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
                     if(cir[i].include(e.clientX, refPos[0].y)){
-                        cir.input[i].push(ACTIVE_GATE);
+                        cir[i].input.push(cir[ACTIVE_GATE]);
                         state = DEFAULT;
                         return;
                     }
@@ -86,7 +85,7 @@ canvas.addEventListener(
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
                     if(cir[i].include(e.clientX, refPos[2].y)){
-                        cir.input[i].push(ACTIVE_GATE);
+                        cir[i].input.push(cir[ACTIVE_GATE]);
                         state = DEFAULT;
                         return;
                     }
@@ -163,9 +162,8 @@ canvas.addEventListener(
     'click',
     function(e){
         if(state == LOGIC_GATE_ADD){
-            if(newLogicGate.x - scale < e.clientX && e.clientX < newLogicGate.x && Math.abs(e.clientY - newLogicGate.y) < 0.4*scale){
+            if(newLogicGate.include(e.clientX, e.clientY)){
                 cir.push(newLogicGate);
-                cir.input.push([]);
                 state = DEFAULT;
             }else{
                 cir.render();

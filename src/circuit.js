@@ -12,6 +12,7 @@ class Node {
         this.depth = 0;
         this.x = x;
         this.y = y;
+        this.input = [];
     }
     // calcDepth(){
     //     for(let i = 0; i < this.input.length; i++){
@@ -58,9 +59,8 @@ class Node {
 }
 
 class Circuit extends Array {
-    constructor(nodeArray, inputArray){
+    constructor(nodeArray){
         super(...nodeArray);
-        this.input = inputArray;
         this.h = 100;
         this.w = 10;
         this.depthCount;
@@ -79,15 +79,15 @@ class Circuit extends Array {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for(let i = 0; i < this.length; i++){
             this[i].render();
-            let n = this.input[i].length;
+            let n = this[i].input.length;
             let k = 0;
-            for(let j of this.input[i]){
+            for(let g of this[i].input){
                 let r = Math.random();
                 k++;
                 ctx.beginPath();
-                ctx.moveTo(this[j].x, this[j].y);
-                ctx.lineTo(this[j].x * r + (this[i].x - scale) * (1 - r), this[j].y);
-                ctx.lineTo(this[j].x * r + (this[i].x - scale) * (1 - r), this[i].y - 0.4*scale + k/(n+1)*0.8*scale);
+                ctx.moveTo(g.x, g.y);
+                ctx.lineTo(g.x * r + (this[i].x - scale) * (1 - r), g.y);
+                ctx.lineTo(g.x * r + (this[i].x - scale) * (1 - r), this[i].y - 0.4*scale + k/(n+1)*0.8*scale);
                 ctx.lineTo(this[i].x - scale, this[i].y - 0.4*scale + k/(n+1)*0.8*scale);
                 ctx.stroke();
             }
@@ -102,13 +102,9 @@ const cir = new Circuit(
         new Node('in', 1, 100, 200),
         new Node('and', 0, 300, 100),
         new Node('or', 0, 300, 200)
-    ],
-    [
-        [],
-        [],
-        [0, 1],
-        [0, 1]
     ]
 );
+cir[2].input.push(cir[0], cir[1]);
+cir[3].input.push(cir[0], cir[1]);
 
 export { Node, canvas, ctx, cir, scale };
