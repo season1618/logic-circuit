@@ -2,15 +2,24 @@ import { cir } from './circuit.js';
 import './edit-circuit.js';
 import './truth-table.js';
 
-let alignButton = document.getElementById('align');
 // let optimizeButton = document.getElementById('optimize');
 // let playButton = document.getElementById('play');
 
-alignButton.addEventListener(
+document.getElementById('align').addEventListener(
     'click',
     function(){
         cir.align();
     }
-)
+);
+
+document.getElementById('png').addEventListener(
+    'click',
+    function(){
+        let anchor = document.createElement('a');
+        anchor.href = canvas.toDataURL();
+        anchor.download = 'logic-circuit.png';
+        anchor.click();
+    }
+);
 
 cir.render();
