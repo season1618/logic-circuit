@@ -35,25 +35,20 @@ button {
 
 table {
     display: block;
+    background: white;
 
     position: absolute;
     top: 0;
     right: 0;
 
-    max-height: 240px;
+    max-height: 100%;
     
     resize: block;
     overflow-y: scroll;
 
     border: 1px solid;
     border-spacing: 0;
-
-    
 }
-
-/* tbody {
-    white-space: nowrap;
-} */
 
 th, td {
     width: 50px;
