@@ -1,7 +1,7 @@
 import { ctx, scale } from './canvas.js';
 
 class Node {
-    constructor(kind, x, y){
+    constructor(kind, x = 0, y = 0){
         this.kind = kind;
         this.x = x;
         this.y = y;
@@ -77,8 +77,14 @@ class Node {
 }
 
 class Circuit extends Array {
-    constructor(nodeArray){
+    constructor(nodeArray, inputArray){
         super(...nodeArray);
+        for(let i = 0; i < inputArray.length; i++){
+            for(let j = 0; j < inputArray[i].length; j++){
+                this[i].input.push(this[inputArray[i][j]]);
+            }
+        }
+        this.align();
     }
     calcDepth(){
         function dfs(v){
@@ -148,7 +154,7 @@ class Circuit extends Array {
             this[i].y = (k + 1) * H - (n+1)/2*H + (maxDepth+1)/2*H;
             k++;
             if(k == n) k = 0;
-        }console.log(this);
+        }
         this.render();
     }
     render(){
@@ -172,15 +178,28 @@ class Circuit extends Array {
     play(){}
 }
 
+// half adder
 const cir = new Circuit(
     [
-        new Node('in', 100, 100),
-        new Node('in', 100, 200),
-        new Node('and', 300, 100),
-        new Node('or', 300, 200)
+        new Node('in', 0, 100),
+        new Node('in', 0, 200),
+        new Node('or', 100, 100),
+        new Node('and', 100, 200),
+        new Node('not', 200, 200),
+        new Node('and', 300, 150),
+        new Node('out', 400, 100),
+        new Node('out', 400, 200)
+    ],
+    [
+        [],
+        [],
+        [0, 1],
+        [0, 1],
+        [3],
+        [2, 4],
+        [5],
+        [3]
     ]
 );
-cir[2].input.push(cir[0], cir[1]);
-cir[3].input.push(cir[0], cir[1]);
 
 export { Node, cir };
