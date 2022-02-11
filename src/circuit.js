@@ -2,7 +2,9 @@ import { ctx, scale } from './canvas.js';
 
 class Node {
     constructor(kind, x = 0, y = 0){
+        // in, out, not, and, or
         this.kind = kind;
+        // position of right side
         this.x = x;
         this.y = y;
         this.input = [];
@@ -162,7 +164,19 @@ class Circuit extends Array {
         let k = 0;
         for(let i = 0; i < this.length; i++){
             let n = numDepth[this[i].depth];
-            this[i].x = (this[i].depth + 1) * W;
+            switch(this[i].kind){
+                case 'in':
+                case 'out':
+                    this[i].x = (this[i].depth + 1) * W;
+                    break;
+                case 'not':
+                    this[i].x = (this[i].depth + 1) * W + 0.7*Math.sqrt(3)/3 * scale;
+                    break;
+                case 'and':
+                case 'or':
+                    this[i].x = (this[i].depth + 1) * W + 0.5 * scale;
+                    break;
+            }
             this[i].y = (k + 1) * H - (n+1)/2*H + (maxDepth+1)/2*H;
             k++;
             if(k == n) k = 0;
