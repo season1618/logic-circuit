@@ -14,23 +14,38 @@ class Node {
         this.value = 0;
         this.isVisited = false;
     }
-    include(x, y){
+    left(){
         switch(this.kind){
             case 'in':
-                if(this.x - 0.5*scale < x && x < this.x && Math.abs(y - this.y) < 0.3*scale) return true;
-                else return false;
+                return this.x - 0.5 * scale;
             case 'out':
-                if(this.x < x && x < this.x + 0.5*scale && Math.abs(y - this.y) < 0.3*scale) return true;
-                else return false;
+                return this.x;
             case 'not':
-                if(this.x - (0.7*1.73/2 + 0.16) * scale < x && x < this.x && Math.abs(y - this.y) < 0.35*scale) return true;
-                else return false;
+                return this.x - (0.7*1.73/2 + 0.16) * scale;
             case 'and':
             case 'or':
-                if(this.x - scale < x && x < this.x && Math.abs(y - this.y) < 0.4*scale) return true;
-                else return false;
+                return this.x - scale;
         }
-        
+    }
+    right(){
+        if(this.kind == 'out') return this.x + 0.5 * scale;
+        else return this.x;
+    }
+    height(){
+        switch(this.kind){
+            case 'in':
+            case 'out':
+                return 0.6 * scale;
+            case 'not':
+                return 0.7 * scale;
+            case 'and':
+            case 'or':
+                return 0.8 * scale;
+        }
+    }
+    include(x, y){
+        if(this.left() < x && x < this.right() && Math.abs(y - this.y) < this.height() / 2) return true;
+        else return false;
     }
     sort(l = 0, r = this.input.length){
         if(l + 1 >= r) return;
