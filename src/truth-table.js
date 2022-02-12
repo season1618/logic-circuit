@@ -1,16 +1,14 @@
 const table = document.getElementById('table');
 
 class TruthTable {
-    constructor(nInput, nOutput){
+    constructor(){
         this.nInput;
         this.nOutput;
         this.inputNames;
         this.outputNames;
         this.outArray;
-        this.setTable(nInput, nOutput);
     }
-    setTable(nInput, nOutput, outArray = [[0, 0], [0, 0], [0, 0], [0, 0]]){
-        console.log(nInput, nOutput, outArray);
+    setTable(nInput, nOutput, outArray){
         this.nInput = nInput;
         this.nOutput = nOutput;
         this.inputNames = new Array(this.nInput).fill().map((inputName, index) => 'in' + (index + 1));
@@ -107,6 +105,6 @@ class TruthTable {
     }
 }
 
-const truthTable = new TruthTable(2, 2);
+const truthTable = new TruthTable();
 
 export { truthTable };

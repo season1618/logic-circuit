@@ -77,6 +77,7 @@ canvas.addEventListener(
                     if((cir[i].kind == 'out' || cir[i].kind == 'not') && cir[i].input.length >= 1) continue;
                     if(cir[i].include(refPos[1].x, e.clientY)){
                         if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
+                        truthTable.setTable(...cir.getTruthTable());
                         state = DEFAULT;
                         return;
                     }
@@ -100,6 +101,7 @@ canvas.addEventListener(
                     if((cir[i].kind == 'out' || cir[i].kind == 'not') && cir[i].input.length >= 1) continue;
                     if(cir[i].include(e.clientX, refPos[2].y)){
                         if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
+                        truthTable.setTable(...cir.getTruthTable());
                         state = DEFAULT;
                         return;
                     }
