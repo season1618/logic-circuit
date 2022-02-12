@@ -50,6 +50,7 @@ canvas.addEventListener(
             case WIRING_FIRST:
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
+                    if((cir[i].kind == 'out' || cir[i].kind == 'not') && cir[i].input.length >= 1) continue;
                     if(cir[i].include(e.clientX, refPos[0].y)){
                         if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
                         state = DEFAULT;
@@ -71,6 +72,7 @@ canvas.addEventListener(
             case WIRING_SECOND:
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
+                    if((cir[i].kind == 'out' || cir[i].kind == 'not') && cir[i].input.length >= 1) continue;
                     if(cir[i].include(refPos[1].x, e.clientY)){
                         if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
                         state = DEFAULT;
@@ -93,6 +95,7 @@ canvas.addEventListener(
             case WIRING_THIRD:
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
+                    if((cir[i].kind == 'out' || cir[i].kind == 'not') && cir[i].input.length >= 1) continue;
                     if(cir[i].include(e.clientX, refPos[2].y)){
                         if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
                         state = DEFAULT;
