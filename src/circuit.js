@@ -1,4 +1,4 @@
-import { ctx, scale } from './canvas.js';
+import { canvas, ctx, scale } from './canvas.js';
 
 class Node {
     constructor(kind, x = 0, y = 0){
@@ -114,6 +114,7 @@ class Circuit extends Array {
             if(this[i].kind == 'in') this.nInput++;
             else if(this[i].kind == 'out') this.nOutput++;
         }
+        this.nColumn = 0;
         for(let i = 0; i < inputArray.length; i++){
             for(let j = 0; j < inputArray[i].length; j++){
                 this[i].input.push(this[inputArray[i][j]]);
@@ -130,7 +131,11 @@ class Circuit extends Array {
         for(let i = 0; i < this.length; i++){
             if(!this[i].isVisited){
                 dfs(this[i]);
+                this.nColumn = Math.max(this.nColumn, this[i].gridX + 1);
             }
+        }
+        for(let i = 0; i < this.length; i++){
+            if(this[i].kind == 'out') this[i].gridX = this.nColumn - 1;
         }
 
         function dfs(v){
@@ -190,16 +195,13 @@ class Circuit extends Array {
         this.sort();
         this.calcGridY();
 
-        let numRow = new Array(this.length).fill(0);
-        let maxRow = 0;
+        let nRow = new Array(this.nColumn).fill(0);
         for(let i = 0; i < this.length; i++){
-            numRow[this[i].gridX]++;
-            maxRow = Math.max(maxRow, numRow[this[i].gridX]);
+            nRow[this[i].gridX]++;
         }
 
         let H = 2*scale, W = 2*scale;
         for(let i = 0; i < this.length; i++){
-            let n = numRow[this[i].gridX];
             switch(this[i].kind){
                 case 'in':
                 case 'out':
@@ -213,7 +215,7 @@ class Circuit extends Array {
                     this[i].x = (this[i].gridX + 1) * W + 0.5 * scale;
                     break;
             }
-            this[i].y = (this[i].gridY + 1) * H - (n+1)/2*H + (maxRow+1)/2*H;
+            this[i].y = (this[i].gridY + 1) * H - (nRow[this[i].gridX] + 1)/2 * H + canvas.height / 2;
         }
         this.render();
     }
