@@ -134,8 +134,8 @@ canvas.addEventListener(
     function(e){
         if(state == DEFAULT){
             state = LOGIC_GATE_ADD;
-            num = 0;
-            newLogicGate = new Node('and', e.clientX, e.clientY);
+            num = 2;
+            newLogicGate = new Node('not', e.clientX, e.clientY);
             newLogicGate.render();
         }
     }
@@ -146,20 +146,26 @@ canvas.addEventListener(
         if(state == LOGIC_GATE_ADD){
             if(e.deltaY > 0){
                 num += 1
-                num %= 3;
+                num %= 5;
             }else{
-                num += 2;
-                num %= 3;
+                num += 4;
+                num %= 5;
             }
             switch(num){
                 case 0:
-                    newLogicGate.kind = 'and';
+                    newLogicGate.kind = 'in';
                     break;
                 case 1:
-                    newLogicGate.kind = 'or';
+                    newLogicGate.kind = 'out';
                     break;
                 case 2:
                     newLogicGate.kind = 'not';
+                    break;
+                case 3:
+                    newLogicGate.kind = 'and';
+                    break;
+                case 4:
+                    newLogicGate.kind = 'or';
                     break;
             }
             cir.render();

@@ -10,7 +10,7 @@ class Node {
         this.input = [];
 
         this.gridX = 0;
-        this.gridY = 0;
+        this.gridY = -1;
         this.value = 0;
         this.isVisited = false;
     }
