@@ -17,15 +17,17 @@ class Node {
     include(x, y){
         switch(this.kind){
             case 'in':
+                if(this.x - 0.5*scale < x && x < this.x && Math.abs(y - this.y) < 0.3*scale) return true;
+                else return false;
             case 'out':
-                if(Math.sqrt((x - this.x)**2 + (y - this.y)**2) < 0.4*scale) return true;
+                if(this.x < x && x < this.x + 0.5*scale && Math.abs(y - this.y) < 0.3*scale) return true;
+                else return false;
+            case 'not':
+                if(this.x - (0.7*1.73/2 + 0.16) * scale < x && x < this.x && Math.abs(y - this.y) < 0.35*scale) return true;
                 else return false;
             case 'and':
             case 'or':
                 if(this.x - scale < x && x < this.x && Math.abs(y - this.y) < 0.4*scale) return true;
-                else return false;
-            case 'not':
-                if(this.x - (0.7*1.73/2 + 0.16) * scale < x && x < this.x && Math.abs(y - this.y) < 0.35*scale) return true;
                 else return false;
         }
         
@@ -60,6 +62,18 @@ class Node {
     }
     render(){
         switch(this.kind){
+            case 'in':
+                ctx.font = '15px sans-serif';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('in' + (this.gridY + 1) + ' ', this.x , this.y);
+                break;
+            case 'out':
+                ctx.font = '15px sans-serif';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(' out' + (this.gridY + 1), this.x, this.y);
+                break;
             case 'not':
                 ctx.beginPath();
                 ctx.arc(this.x - 0.08*scale, this.y, 0.08*scale, 0, 2*Math.PI);
