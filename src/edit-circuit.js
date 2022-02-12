@@ -1,5 +1,6 @@
 import { canvas, ctx, scale } from './canvas.js';
 import { Node, cir } from './circuit.js';
+import { truthTable } from './truth-table.js';
 
 let DEFAULT = 0;
 let LOGIC_GATE_MOVE = 1;
@@ -53,6 +54,7 @@ canvas.addEventListener(
                     if((cir[i].kind == 'out' || cir[i].kind == 'not') && cir[i].input.length >= 1) continue;
                     if(cir[i].include(e.clientX, refPos[0].y)){
                         if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
+                        truthTable.setTable(...cir.getTruthTable());
                         state = DEFAULT;
                         return;
                     }
@@ -181,7 +183,7 @@ canvas.addEventListener(
     function(e){
         if(state == LOGIC_GATE_ADD){
             if(newLogicGate.include(e.clientX, e.clientY)){
-                cir.push(newLogicGate);
+                cir.add(newLogicGate);
                 state = DEFAULT;
             }else{
                 cir.render();

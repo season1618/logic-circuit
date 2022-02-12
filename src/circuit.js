@@ -47,6 +47,28 @@ class Node {
         if(this.left() < x && x < this.right() && Math.abs(y - this.y) < this.height() / 2) return true;
         else return false;
     }
+
+    calcValue(){
+        switch(this.kind){
+            case 'in':
+                break;
+            case 'out':
+                this.value = this.input[0].value;
+                break;
+            case 'not':
+                this.value = this.input[0].value ^ 1;
+                break;
+            case 'and':
+                this.value = 1;
+                for(let g of this.input) this.value &= g.value;
+                break;
+            case 'or':
+                this.value = 0;
+                for(let g of this.input) this.value |= g.value;
+                break;
+        }
+    }
+
     sort(l = 0, r = this.input.length){
         if(l + 1 >= r) return;
         let m = Math.floor((l + r) / 2);
@@ -73,8 +95,7 @@ class Node {
             this.input[l + k] = tempArray[k];
         }
     }
-    calcValue(){
-    }
+
     render(){
         switch(this.kind){
             case 'in':
@@ -136,6 +157,27 @@ class Circuit extends Array {
             }
         }
         this.align();
+    }
+
+    add(node){
+        cir.push(node);
+        if(node.kind == 'in') this.nInput++;
+        else if(node.kind == 'out') this.nOutput++;
+    }
+
+    isConnected(i, j){
+        // in: j -> out: i
+        for(let i = 0; i < this.length; i++) this[i].isVisited = false;
+        dfs(this[i]);
+        if(this[j].isVisited) return true;
+        else false;
+
+        function dfs(v){
+            v.isVisited = true;
+            for(let u of v.input){
+                if(!u.isVisited) dfs(u);
+            }
+        }
     }
 
     calcGridX(){
@@ -234,20 +276,7 @@ class Circuit extends Array {
         }
         this.render();
     }
-    isConnected(i, j){
-        // in: j -> out: i
-        for(let i = 0; i < this.length; i++) this[i].isVisited = false;
-        dfs(this[i]);
-        if(this[j].isVisited) return true;
-        else false;
-
-        function dfs(v){
-            v.isVisited = true;
-            for(let u of v.input){
-                if(!u.isVisited) dfs(u);
-            }
-        }
-    }
+    
     render(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for(let i = 0; i < this.length; i++){
@@ -281,6 +310,23 @@ class Circuit extends Array {
         }
     }
     play(){}
+
+    getTruthTable(){
+        this.calcGridX();
+        this.sort();
+        let outArray = new Array(1 << this.nInput);
+        for(let i = 0; i < (1 << this.nInput); i++){
+            outArray[i] = new Array();
+            for(let j = 0; j < this.nInput; j++){
+                this[j].value = (i >> j) & 1;
+            }
+            for(let j = this.nInput; j < this.length; j++){
+                this[j].calcValue();
+                if(this[j].kind == 'out') outArray[i].push(this[j].value);
+            }
+        }
+        return [this.nInput, this.nOutput, outArray];
+    }
 }
 
 // half adder

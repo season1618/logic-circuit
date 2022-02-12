@@ -9,12 +9,13 @@ class TruthTable {
         this.outArray;
         this.setTable(nInput, nOutput);
     }
-    setTable(nInput, nOutput){
+    setTable(nInput, nOutput, outArray = [[0, 0], [0, 0], [0, 0], [0, 0]]){
+        console.log(nInput, nOutput, outArray);
         this.nInput = nInput;
         this.nOutput = nOutput;
         this.inputNames = new Array(this.nInput).fill().map((inputName, index) => 'in' + (index + 1));
         this.outputNames = new Array(this.nOutput).fill().map((outputName, index) => 'out' + (index + 1));
-        this.outArray = new Array((1 << this.nInput)).fill(new Array(this.nOutput).fill(0));
+        this.outArray = outArray;
 
         let thead = document.createElement('thead');
         let tbody = document.createElement('tbody');
@@ -89,7 +90,7 @@ class TruthTable {
             // output
             for(let j = 0; j < this.nOutput; j++){
                 tbody.childNodes[i].appendChild(document.createElement('td'));
-                tbody.childNodes[i].childNodes[j + this.nInput].appendChild(document.createTextNode(0));
+                tbody.childNodes[i].childNodes[j + this.nInput].appendChild(document.createTextNode(this.outArray[i][j]));
                 let t = this;
                 tbody.childNodes[i].childNodes[j + this.nInput].addEventListener(
                     'click',
@@ -107,3 +108,5 @@ class TruthTable {
 }
 
 const truthTable = new TruthTable(2, 2);
+
+export { truthTable };
