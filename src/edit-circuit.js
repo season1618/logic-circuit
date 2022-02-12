@@ -51,7 +51,7 @@ canvas.addEventListener(
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
                     if(cir[i].include(e.clientX, refPos[0].y)){
-                        cir[i].input.push(cir[ACTIVE_GATE]);
+                        if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
                         state = DEFAULT;
                         return;
                     }
@@ -69,6 +69,14 @@ canvas.addEventListener(
                 }
                 break;
             case WIRING_SECOND:
+                for(let i = 0; i < cir.length; i++){
+                    if(i == ACTIVE_GATE) continue;
+                    if(cir[i].include(refPos[1].x, e.clientY)){
+                        if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
+                        state = DEFAULT;
+                        return;
+                    }
+                }
                 if(Math.abs(e.clientX - refPos[1].x) < 0.4 * scale){
                     cir.render();
                     ctx.beginPath();
@@ -86,7 +94,7 @@ canvas.addEventListener(
                 for(let i = 0; i < cir.length; i++){
                     if(i == ACTIVE_GATE) continue;
                     if(cir[i].include(e.clientX, refPos[2].y)){
-                        cir[i].input.push(cir[ACTIVE_GATE]);
+                        if(!cir.isConnected(ACTIVE_GATE, i)) cir[i].input.push(cir[ACTIVE_GATE]);
                         state = DEFAULT;
                         return;
                     }

@@ -93,6 +93,12 @@ class Node {
 class Circuit extends Array {
     constructor(nodeArray, inputArray){
         super(...nodeArray);
+        this.nInput = 0;
+        this.nOutput = 0;
+        for(let i = 0; i < nodeArray.length; i++){
+            if(this[i].kind == 'in') this.nInput++;
+            else if(this[i].kind == 'out') this.nOutput++;
+        }
         for(let i = 0; i < inputArray.length; i++){
             for(let j = 0; j < inputArray[i].length; j++){
                 this[i].input.push(this[inputArray[i][j]]);
@@ -182,6 +188,20 @@ class Circuit extends Array {
             if(k == n) k = 0;
         }
         this.render();
+    }
+    isConnected(i, j){
+        // in: j -> out: i
+        for(let i = 0; i < this.length; i++) this[i].isVisited = false;
+        dfs(this[i]);
+        if(this[j].isVisited) return true;
+        else false;
+
+        function dfs(v){
+            v.isVisited = true;
+            for(let u of v.input){
+                if(!u.isVisited) dfs(u);
+            }
+        }
     }
     render(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
