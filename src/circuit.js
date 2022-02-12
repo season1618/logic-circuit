@@ -9,8 +9,9 @@ class Node {
         this.y = y;
         this.input = [];
 
+        this.gridX = 0;
+        this.gridY = 0;
         this.value = 0;
-        this.depth = 0;
         this.isVisited = false;
     }
     include(x, y){
@@ -106,28 +107,41 @@ class Circuit extends Array {
         }
         this.align();
     }
-    calcDepth(){
-        function dfs(v){
-            if(v.isVisited) return;
-            v.isVisited = true;
-            if(v.kind == 'in'){
-                v.depth = 0;
-                return;
-            }
-            for(let u of v.input){
-                dfs(u)
-                v.depth = Math.max(v.depth, u.depth);
-            }
-            v.depth++;
-        }
+
+    calcGridX(){
         for(let i = 0; i < this.length; i++){
             this[i].isVisited = false;
-            this[i].depth = 0;
+            this[i].gridX = 0;
         }
         for(let i = 0; i < this.length; i++){
             if(!this[i].isVisited){
                 dfs(this[i]);
             }
+        }
+
+        function dfs(v){
+            if(v.isVisited) return;
+            v.isVisited = true;
+            if(v.kind == 'in'){
+                v.gridX = 0;
+                return;
+            }
+            for(let u of v.input){
+                dfs(u)
+                v.gridX = Math.max(v.gridX, u.gridX);
+            }
+            v.gridX++;
+        }
+    }
+    calcGridY(){
+        let s = 0, t = 0;
+        for(let i = 0; i < this.length; i++){
+            if(s < this[i].gridX){
+                s++;
+                t = 0;
+            }
+            this[i].gridY = t;
+            t++;
         }
     }
     sort(l = 0, r = this.length){
@@ -144,7 +158,7 @@ class Circuit extends Array {
             }else if(j == r){
                 tempArray[k] = this[i];
                 i++;
-            }else if(this[i].depth < this[j].depth || this[i].depth == this[j].depth && this[i].y < this[j].y){
+            }else if(this[i].gridX < this[j].gridX || this[i].gridX == this[j].gridX && this[i].y < this[j].y){
                 tempArray[k] = this[i];
                 i++;
             }else{
@@ -158,34 +172,34 @@ class Circuit extends Array {
     }
     align(){
         for(let i = 0; i < this.length; i++) this[i].sort();
-        this.calcDepth();
+        this.calcGridX();
         this.sort();
-        let numDepth = new Array(100).fill(0);
-        let maxDepth = 0;
+        this.calcGridY();
+
+        let numRow = new Array(this.length).fill(0);
+        let maxRow = 0;
         for(let i = 0; i < this.length; i++){
-            numDepth[this[i].depth]++;
-            maxDepth = Math.max(maxDepth, numDepth[this[i].depth]);
+            numRow[this[i].gridX]++;
+            maxRow = Math.max(maxRow, numRow[this[i].gridX]);
         }
+
         let H = 2*scale, W = 2*scale;
-        let k = 0;
         for(let i = 0; i < this.length; i++){
-            let n = numDepth[this[i].depth];
+            let n = numRow[this[i].gridX];
             switch(this[i].kind){
                 case 'in':
                 case 'out':
-                    this[i].x = (this[i].depth + 1) * W;
+                    this[i].x = (this[i].gridX + 1) * W;
                     break;
                 case 'not':
-                    this[i].x = (this[i].depth + 1) * W + 0.7*Math.sqrt(3)/3 * scale;
+                    this[i].x = (this[i].gridX + 1) * W + 0.7*Math.sqrt(3)/3 * scale;
                     break;
                 case 'and':
                 case 'or':
-                    this[i].x = (this[i].depth + 1) * W + 0.5 * scale;
+                    this[i].x = (this[i].gridX + 1) * W + 0.5 * scale;
                     break;
             }
-            this[i].y = (k + 1) * H - (n+1)/2*H + (maxDepth+1)/2*H;
-            k++;
-            if(k == n) k = 0;
+            this[i].y = (this[i].gridY + 1) * H - (n+1)/2*H + (maxRow+1)/2*H;
         }
         this.render();
     }
