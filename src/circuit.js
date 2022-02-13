@@ -1,4 +1,6 @@
-import { canvas, ctx, scale } from './canvas.js';
+import { canvas, ctx } from './canvas.js';
+
+let canvasScale = 100;
 
 class Node {
     constructor(kind, x = 0, y = 0){
@@ -14,35 +16,42 @@ class Node {
         this.value = 0;
         this.isVisited = false;
     }
+
     left(){
         switch(this.kind){
             case 'in':
-                return this.x - 0.5 * scale;
+                return this.x - 0.5 * canvasScale;
             case 'out':
                 return this.x;
             case 'not':
-                return this.x - (0.7*1.73/2 + 0.16) * scale;
+                return this.x - (0.7*1.73/2 + 0.16) * canvasScale;
             case 'and':
             case 'or':
-                return this.x - scale;
+                return this.x - canvasScale;
         }
     }
     right(){
-        if(this.kind == 'out') return this.x + 0.5 * scale;
+        if(this.kind == 'out') return this.x + 0.5 * canvasScale;
         else return this.x;
     }
     height(){
         switch(this.kind){
             case 'in':
             case 'out':
-                return 0.6 * scale;
+                return 0.6 * canvasScale;
             case 'not':
-                return 0.7 * scale;
+                return 0.7 * canvasScale;
             case 'and':
             case 'or':
-                return 0.8 * scale;
+                return 0.8 * canvasScale;
         }
     }
+
+    scale(mouseX, mouseY, scaleRate){
+        this.x = mouseX + (this.x - mouseX) * scaleRate;
+        this.y = mouseY + (this.y - mouseY) * scaleRate;
+    }
+
     include(x, y){
         if(this.left() < x && x < this.right() && Math.abs(y - this.y) < this.height() / 2) return true;
         else return false;
@@ -112,29 +121,29 @@ class Node {
                 break;
             case 'not':
                 ctx.beginPath();
-                ctx.arc(this.x - 0.08*scale, this.y, 0.08*scale, 0, 2*Math.PI);
-                ctx.moveTo(this.x - 0.16*scale, this.y);
-                ctx.lineTo(this.x - 0.16*scale - 0.7*Math.sqrt(3)/2*scale, this.y + 0.7/2*scale);
-                ctx.lineTo(this.x - 0.16*scale - 0.7*Math.sqrt(3)/2*scale, this.y - 0.7/2*scale);
+                ctx.arc(this.x - 0.08*canvasScale, this.y, 0.08*canvasScale, 0, 2*Math.PI);
+                ctx.moveTo(this.x - 0.16*canvasScale, this.y);
+                ctx.lineTo(this.x - 0.16*canvasScale - 0.7*Math.sqrt(3)/2*canvasScale, this.y + 0.7/2*canvasScale);
+                ctx.lineTo(this.x - 0.16*canvasScale - 0.7*Math.sqrt(3)/2*canvasScale, this.y - 0.7/2*canvasScale);
                 ctx.closePath();
                 ctx.stroke();
                 break;
             case 'and':
                 ctx.beginPath();
-                ctx.arc(this.x - 0.4*scale, this.y, 0.4*scale, -Math.PI/2, Math.PI/2);
-                ctx.moveTo(this.x - 0.4*scale, this.y + 0.4*scale);
-                ctx.lineTo(this.x - scale, this.y + 0.4*scale);
-                ctx.lineTo(this.x - scale, this.y - 0.4*scale);
-                ctx.lineTo(this.x - 0.4*scale, this.y - 0.4*scale);
+                ctx.arc(this.x - 0.4*canvasScale, this.y, 0.4*canvasScale, -Math.PI/2, Math.PI/2);
+                ctx.moveTo(this.x - 0.4*canvasScale, this.y + 0.4*canvasScale);
+                ctx.lineTo(this.x - canvasScale, this.y + 0.4*canvasScale);
+                ctx.lineTo(this.x - canvasScale, this.y - 0.4*canvasScale);
+                ctx.lineTo(this.x - 0.4*canvasScale, this.y - 0.4*canvasScale);
                 ctx.stroke();
                 break;
             case 'or':
                 ctx.beginPath();
-                ctx.arc(this.x - 0.7*scale, this.y - 0.4*scale, 0.8*scale, Math.PI/6, Math.PI/2);
-                ctx.lineTo(this.x - 1.1*scale, this.y + 0.4*scale);
-                ctx.arc(this.x - 1.8*scale, this.y, 0.8*scale, Math.PI/6, -Math.PI/6, true);
-                ctx.lineTo(this.x - 0.7*scale, this.y - 0.4*scale);
-                ctx.arc(this.x - 0.7*scale, this.y + 0.4*scale, 0.8*scale, -Math.PI/2, -Math.PI/6);
+                ctx.arc(this.x - 0.7*canvasScale, this.y - 0.4*canvasScale, 0.8*canvasScale, Math.PI/6, Math.PI/2);
+                ctx.lineTo(this.x - 1.1*canvasScale, this.y + 0.4*canvasScale);
+                ctx.arc(this.x - 1.8*canvasScale, this.y, 0.8*canvasScale, Math.PI/6, -Math.PI/6, true);
+                ctx.lineTo(this.x - 0.7*canvasScale, this.y - 0.4*canvasScale);
+                ctx.arc(this.x - 0.7*canvasScale, this.y + 0.4*canvasScale, 0.8*canvasScale, -Math.PI/2, -Math.PI/6);
                 ctx.stroke();
                 break;
         }
@@ -166,6 +175,11 @@ class Circuit extends Array {
         }
         this.align();
         this.render();
+    }
+
+    scale(mouseX, mouseY, scaleRate){
+        canvasScale *= scaleRate;
+        for(let i = 0; i < this.length; i++) this[i].scale(mouseX, mouseY, scaleRate);
     }
 
     add(node){
@@ -266,7 +280,7 @@ class Circuit extends Array {
             nRow[this[i].gridX]++;
         }
 
-        let H = 2*scale, W = 2*scale;
+        let H = 2*canvasScale, W = 2*canvasScale;
         for(let i = 0; i < this.length; i++){
             switch(this[i].kind){
                 case 'in':
@@ -274,11 +288,11 @@ class Circuit extends Array {
                     this[i].x = (this[i].gridX + 1) * W;
                     break;
                 case 'not':
-                    this[i].x = (this[i].gridX + 1) * W + 0.7*Math.sqrt(3)/3 * scale;
+                    this[i].x = (this[i].gridX + 1) * W + 0.7*Math.sqrt(3)/3 * canvasScale;
                     break;
                 case 'and':
                 case 'or':
-                    this[i].x = (this[i].gridX + 1) * W + 0.5 * scale;
+                    this[i].x = (this[i].gridX + 1) * W + 0.5 * canvasScale;
                     break;
             }
             this[i].y = (this[i].gridY + 1) * H - (nRow[this[i].gridX] + 1)/2 * H + canvas.height / 2;
@@ -297,21 +311,21 @@ class Circuit extends Array {
                 k++;
                 ctx.beginPath();
                 ctx.moveTo(g.x, g.y);
-                ctx.lineTo(g.x * r + (this[i].x - scale) * (1 - r), g.y);
+                ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), g.y);
                 
                 switch(this[i].kind){
                     case 'out':
-                        ctx.lineTo(g.x * r + (this[i].x - scale) * (1 - r), this[i].y);
+                        ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), this[i].y);
                         ctx.lineTo(this[i].x, this[i].y);
                         break;
                     case 'not':
-                        ctx.lineTo(g.x * r + (this[i].x - scale) * (1 - r), this[i].y - 0.35*scale + k/(n+1)*0.7*scale);
-                        ctx.lineTo(this[i].x - (0.7*1.73/2 + 0.16) * scale, this[i].y - 0.35*scale + k/(n+1)*0.7*scale);
+                        ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), this[i].y - 0.35*canvasScale + k/(n+1)*0.7*canvasScale);
+                        ctx.lineTo(this[i].x - (0.7*1.73/2 + 0.16) * canvasScale, this[i].y - 0.35*canvasScale + k/(n+1)*0.7*canvasScale);
                         break;
                     case 'and':
                     case 'or':
-                        ctx.lineTo(g.x * r + (this[i].x - scale) * (1 - r), this[i].y - 0.4*scale + k/(n+1)*0.8*scale);
-                        ctx.lineTo(this[i].x - scale, this[i].y - 0.4*scale + k/(n+1)*0.8*scale);
+                        ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), this[i].y - 0.4*canvasScale + k/(n+1)*0.8*canvasScale);
+                        ctx.lineTo(this[i].x - canvasScale, this[i].y - 0.4*canvasScale + k/(n+1)*0.8*canvasScale);
                         break;
                 }
                 ctx.stroke();
@@ -340,4 +354,4 @@ class Circuit extends Array {
 
 const cir = new Circuit();
 
-export { Node, cir };
+export { canvasScale, Node, cir };

@@ -1,5 +1,5 @@
-import { canvas, ctx, scale } from './canvas.js';
-import { Node, cir } from './circuit.js';
+import { canvas, ctx } from './canvas.js';
+import { canvasScale, Node, cir } from './circuit.js';
 import { tt } from './truth-table.js';
 
 let DEFAULT = 0;
@@ -22,7 +22,7 @@ canvas.addEventListener(
                 let x = e.clientX;
                 let y = e.clientY;
                 for(let i = 0; i < cir.length; i++){
-                    if(Math.sqrt((x - cir[i].x)**2 + (y - cir[i].y)**2) < 0.2*scale){
+                    if(Math.sqrt((x - cir[i].x)**2 + (y - cir[i].y)**2) < 0.2*canvasScale){
                         refPos[0].x = cir[i].x;
                         refPos[0].y = cir[i].y;
                         ACTIVE_GATE = i;
@@ -59,7 +59,7 @@ canvas.addEventListener(
                         return;
                     }
                 }
-                if(Math.abs(e.clientY - refPos[0].y) < 0.4 * scale){
+                if(Math.abs(e.clientY - refPos[0].y) < 0.4 * canvasScale){
                     cir.render();
                     ctx.beginPath();
                     ctx.moveTo(refPos[0].x, refPos[0].y);
@@ -82,7 +82,7 @@ canvas.addEventListener(
                         return;
                     }
                 }
-                if(Math.abs(e.clientX - refPos[1].x) < 0.4 * scale){
+                if(Math.abs(e.clientX - refPos[1].x) < 0.4 * canvasScale){
                     cir.render();
                     ctx.beginPath();
                     ctx.moveTo(refPos[0].x, refPos[0].y);
@@ -150,33 +150,43 @@ canvas.addEventListener(
 canvas.addEventListener(
     'wheel',
     function(e){
-        if(state == LOGIC_GATE_ADD){
-            if(e.deltaY > 0){
-                num += 1
-                num %= 5;
-            }else{
-                num += 4;
-                num %= 5;
-            }
-            switch(num){
-                case 0:
-                    newLogicGate.kind = 'in';
-                    break;
-                case 1:
-                    newLogicGate.kind = 'out';
-                    break;
-                case 2:
-                    newLogicGate.kind = 'not';
-                    break;
-                case 3:
-                    newLogicGate.kind = 'and';
-                    break;
-                case 4:
-                    newLogicGate.kind = 'or';
-                    break;
-            }
-            cir.render();
-            newLogicGate.render();
+        switch(state){
+            case DEFAULT:
+                if(canvasScale < 1 && e.deltaY > 0) return;
+                if(10000 < canvasScale && e.deltaY < 0) return;
+                if(e.deltaY < 0) cir.scale(e.clientX, e.clientY, 1.2);
+                else cir.scale(e.clientX, e.clientY, 1/1.2);
+                cir.render();
+                //canvasScale -= e.deltaY / 20;
+                break;
+            case LOGIC_GATE_ADD:
+                if(e.deltaY > 0){
+                    num += 1
+                    num %= 5;
+                }else{
+                    num += 4;
+                    num %= 5;
+                }
+                switch(num){
+                    case 0:
+                        newLogicGate.kind = 'in';
+                        break;
+                    case 1:
+                        newLogicGate.kind = 'out';
+                        break;
+                    case 2:
+                        newLogicGate.kind = 'not';
+                        break;
+                    case 3:
+                        newLogicGate.kind = 'and';
+                        break;
+                    case 4:
+                        newLogicGate.kind = 'or';
+                        break;
+                }
+                cir.render();
+                newLogicGate.render();
+                break;
         }
     }
 );
