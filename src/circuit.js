@@ -264,7 +264,7 @@ class Circuit extends Array {
             }else if(j == r){
                 tempArray[k] = this[i];
                 i++;
-            }else if(this[i].gridX < this[j].gridX || this[i].gridX == this[j].gridX && this[i].y < this[j].y){
+            }else if(this[i].gridX < this[j].gridX || this[i].gridX == this[j].gridX && this[i].y <= this[j].y){
                 tempArray[k] = this[i];
                 i++;
             }else{
