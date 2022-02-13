@@ -54,10 +54,10 @@ class Node {
             case 'in':
                 break;
             case 'out':
-                this.value = this.input[0].value;
+                if(this.input.length > 0) this.value = this.input[0].value;
                 break;
             case 'not':
-                this.value = this.input[0].value ^ 1;
+                if(this.input.length > 0) this.value = this.input[0].value ^ 1;
                 break;
             case 'and':
                 this.value = 1;
