@@ -3,7 +3,7 @@ import './edit-circuit.js';
 import { tt } from './truth-table.js';
 import './table-event.js';
 
-// let optimizeButton = document.getElementById('optimize');
+//document.getElementById('optimize');
 // let playButton = document.getElementById('play');
 
 document.getElementById('align').addEventListener(
@@ -11,6 +11,13 @@ document.getElementById('align').addEventListener(
     function(){
         cir.align();
         tt.setTable(...cir.getTruthTable());
+    }
+);
+
+document.getElementById('dnf').addEventListener(
+    'click',
+    function(){
+        cir.setCircuit(...tt.getDNF());
     }
 );
 
