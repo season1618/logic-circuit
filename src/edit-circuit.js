@@ -8,11 +8,13 @@ let LOGIC_GATE_ADD = 2;
 let WIRING_FIRST = 3;
 let WIRING_SECOND = 4;
 let WIRING_THIRD = 5;
+let SCREEN_MOVE = 6;
 
 let ACTIVE_GATE = -1;
 
 let state = DEFAULT;
 let refPos = [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }];
+let mousePrevX, mousePrevY;
 
 canvas.addEventListener(
     'mousedown',
@@ -27,22 +29,32 @@ canvas.addEventListener(
                         refPos[0].y = cir[i].y;
                         ACTIVE_GATE = i;
                         state = WIRING_FIRST;
-                        break;
+                        return;
                     }
                     if(cir[i].include(e.clientX, e.clientY)){
                         ACTIVE_GATE = i;
                         state = LOGIC_GATE_MOVE;
-                        break;
+                        return;
                     }
                 }
+                state = SCREEN_MOVE;
+                mousePrevX = e.clientX;
+                mousePrevY = e.clientY;
                 break;
         }
     }
 );
+
 canvas.addEventListener(
     'mousemove',
     function(e){
         switch(state){
+            case SCREEN_MOVE:
+                cir.translate(e.clientX - mousePrevX, e.clientY - mousePrevY);
+                cir.render();
+                mousePrevX = e.clientX;
+                mousePrevY = e.clientY;
+                break;
             case LOGIC_GATE_MOVE:
                 cir[ACTIVE_GATE].x = e.clientX;
                 cir[ACTIVE_GATE].y = e.clientY;
@@ -117,10 +129,14 @@ canvas.addEventListener(
         }
     }
 );
+
 canvas.addEventListener(
     'mouseup',
     function(){
         switch(state){
+            case SCREEN_MOVE:
+                state = DEFAULT;
+                break;
             case LOGIC_GATE_MOVE:
                 state = DEFAULT;
                 break;
@@ -147,6 +163,7 @@ canvas.addEventListener(
         }
     }
 );
+
 canvas.addEventListener(
     'wheel',
     function(e){
@@ -190,6 +207,7 @@ canvas.addEventListener(
         }
     }
 );
+
 canvas.addEventListener(
     'click',
     function(e){

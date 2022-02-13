@@ -47,6 +47,10 @@ class Node {
         }
     }
 
+    translate(mouseMoveX, mouseMoveY){
+        this.x += mouseMoveX;
+        this.y += mouseMoveY;
+    }
     scale(mouseX, mouseY, scaleRate){
         this.x = mouseX + (this.x - mouseX) * scaleRate;
         this.y = mouseY + (this.y - mouseY) * scaleRate;
@@ -177,6 +181,9 @@ class Circuit extends Array {
         this.render();
     }
 
+    translate(mouseMoveX, mouseMoveY){
+        for(let i = 0; i < this.length; i++) this[i].translate(mouseMoveX, mouseMoveY);
+    }
     scale(mouseX, mouseY, scaleRate){
         canvasScale *= scaleRate;
         for(let i = 0; i < this.length; i++) this[i].scale(mouseX, mouseY, scaleRate);
