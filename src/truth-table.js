@@ -8,7 +8,7 @@ class TruthTable {
         this.outputNames;
         this.outArray;
     }
-    setTable(nInput, nOutput, outArray){
+    setTable(nInput, nOutput, outArray = new Array(1 << nInput).fill().map(() => new Array(nOutput).fill(0))){
         this.nInput = nInput;
         this.nOutput = nOutput;
         this.inputNames = new Array(this.nInput).fill().map((inputName, index) => 'in' + (index + 1));
@@ -29,8 +29,8 @@ class TruthTable {
             'mouseover',
             function(e){
                 let width = e.target.getBoundingClientRect().right - e.target.getBoundingClientRect().left;
-                let celCount = e.offsetX / width
-                let posCel = celCount - Math.floor(celCount);
+                let celCount = (e.clientX - e.currentTarget.getBoundingClientRect().left) / width
+                let posCel = e.offsetX / width;
                 if(celCount < nInput){
                     if(0.2 < posCel && posCel < 0.8){
                         if(nInput > 1) this.style.cursor = 'zoom-out';
@@ -50,8 +50,8 @@ class TruthTable {
             'click',
             function(e){
                 let width = e.target.getBoundingClientRect().right - e.target.getBoundingClientRect().left;
-                let celCount = e.offsetX / width
-                let posCel = celCount - Math.floor(celCount);
+                let celCount = (e.clientX - e.currentTarget.getBoundingClientRect().left) / width
+                let posCel = e.offsetX / width;
                 if(celCount < nInput){
                     if(0.2 < posCel && posCel < 0.8){
                         if(nInput > 1) t.setTable(nInput - 1, nOutput);
