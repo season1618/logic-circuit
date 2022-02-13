@@ -103,6 +103,8 @@ class TruthTable {
         table.replaceChild(thead, table.children[0]);
         table.replaceChild(tbody, table.children[1]);
     }
+    getDNF(){
+    }
 }
 
 const truthTable = new TruthTable();

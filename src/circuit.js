@@ -143,11 +143,19 @@ class Node {
 }
 
 class Circuit extends Array {
-    constructor(nodeArray, inputArray){
-        super(...nodeArray);
+    constructor(){
+        super();
+        this.nInput = 0;
+        this.nOutput = 0;
+        this.nColumn = 0;
+    }
+
+    setCircuit(nodeArray, inputArray){
+        this.splice(0);
         this.nInput = 0;
         this.nOutput = 0;
         for(let i = 0; i < nodeArray.length; i++){
+            this.push(nodeArray[i]);
             if(this[i].kind == 'in') this.nInput++;
             else if(this[i].kind == 'out') this.nOutput++;
         }
@@ -158,7 +166,7 @@ class Circuit extends Array {
             }
         }
         this.align();
-        truthTable.setTable(...this.getTruthTable());
+        
     }
 
     add(node){
@@ -331,28 +339,6 @@ class Circuit extends Array {
     }
 }
 
-// half adder
-const cir = new Circuit(
-    [
-        new Node('in', 0, 100),
-        new Node('in', 0, 200),
-        new Node('or', 100, 100),
-        new Node('and', 100, 200),
-        new Node('not', 200, 200),
-        new Node('and', 300, 150),
-        new Node('out', 400, 100),
-        new Node('out', 400, 200)
-    ],
-    [
-        [],
-        [],
-        [0, 1],
-        [0, 1],
-        [3],
-        [2, 4],
-        [5],
-        [3]
-    ]
-);
+const cir = new Circuit();
 
 export { Node, cir };
