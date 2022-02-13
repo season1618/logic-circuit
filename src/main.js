@@ -10,6 +10,7 @@ document.getElementById('align').addEventListener(
     'click',
     function(){
         cir.align();
+        tt.setTable(...cir.getTruthTable());
     }
 );
 
