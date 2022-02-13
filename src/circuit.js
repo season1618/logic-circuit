@@ -96,7 +96,7 @@ class Node {
             }else if(j == r){
                 tempArray[k] = this.input[i];
                 i++;
-            }else if(this.input[i].y < this.input[j].y){
+            }else if(this.input[i].y <= this.input[j].y){
                 tempArray[k] = this.input[i];
                 i++;
             }else{

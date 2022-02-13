@@ -34,14 +34,14 @@ document.getElementById('png').addEventListener(
 // half adder
 cir.setCircuit(
     [
-        ['in', 0, 100],
-        ['in', 0, 200],
-        ['or', 100, 100],
-        ['and', 100, 200],
-        ['not', 200, 200],
-        ['and', 300, 150],
-        ['out', 400, 100],
-        ['out', 400, 200]
+        ['in'],
+        ['in'],
+        ['or'],
+        ['and'],
+        ['not'],
+        ['and'],
+        ['out'],
+        ['out']
     ],
     [
         [],
