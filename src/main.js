@@ -1,6 +1,7 @@
 import { cir } from './circuit.js';
 import './edit-circuit.js';
-import { truthTable } from './truth-table.js';
+import { tt } from './truth-table.js';
+import './table-event.js';
 
 // let optimizeButton = document.getElementById('optimize');
 // let playButton = document.getElementById('play');
@@ -45,4 +46,4 @@ cir.setCircuit(
         [3]
     ]
 );
-truthTable.setTable(...cir.getTruthTable());
+tt.setTable(...cir.getTruthTable());

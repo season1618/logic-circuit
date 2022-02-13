@@ -1,4 +1,6 @@
 const table = document.getElementById('table');
+const thead = table.children[0];
+const tbody = table.children[1];
 
 class TruthTable {
     constructor(){
@@ -15,8 +17,8 @@ class TruthTable {
         this.outputNames = new Array(this.nOutput).fill().map((outputName, index) => 'out' + (index + 1));
         this.outArray = outArray;
 
-        let thead = document.createElement('thead');
-        let tbody = document.createElement('tbody');
+        while(thead.firstChild) thead.removeChild(thead.firstChild);
+        while(tbody.firstChild) tbody.removeChild(tbody.firstChild);
 
         // thead
         thead.appendChild(document.createElement('tr'));
@@ -24,49 +26,7 @@ class TruthTable {
         thead.childNodes[0].appendChild(document.createElement('th'));
         thead.childNodes[0].childNodes[0].setAttribute('colspan', nInput + nOutput);
         thead.childNodes[0].childNodes[0].appendChild(document.createTextNode('Truth Table'));
-        let t = this;
-        thead.childNodes[1].addEventListener(
-            'mouseover',
-            function(e){
-                let width = e.target.getBoundingClientRect().right - e.target.getBoundingClientRect().left;
-                let celCount = (e.clientX - e.currentTarget.getBoundingClientRect().left) / width
-                let posCel = e.offsetX / width;
-                if(celCount < nInput){
-                    if(0.2 < posCel && posCel < 0.8){
-                        if(nInput > 1) this.style.cursor = 'zoom-out';
-                    }else{
-                        this.style.cursor = 'zoom-in';
-                    }
-                }else{
-                    if(0.2 < posCel && posCel < 0.8){
-                        if(nOutput > 1) this.style.cursor = 'zoom-out';
-                    }else{
-                        this.style.cursor = 'zoom-in';
-                    }
-                }
-            }
-        );
-        thead.childNodes[1].addEventListener(
-            'click',
-            function(e){
-                let width = e.target.getBoundingClientRect().right - e.target.getBoundingClientRect().left;
-                let celCount = (e.clientX - e.currentTarget.getBoundingClientRect().left) / width
-                let posCel = e.offsetX / width;
-                if(celCount < nInput){
-                    if(0.2 < posCel && posCel < 0.8){
-                        if(nInput > 1) t.setTable(nInput - 1, nOutput);
-                    }else{
-                        t.setTable(nInput + 1, nOutput);
-                    }
-                }else{
-                    if(0.2 < posCel && posCel < 0.8){
-                        if(nOutput > 1) t.setTable(nInput, nOutput - 1);
-                    }else{
-                        t.setTable(nInput, nOutput + 1);
-                    }
-                }
-            }
-        );
+        
         for(let i = 0; i < this.nInput; i++){
             thead.childNodes[1].appendChild(document.createElement('th'));
             thead.childNodes[1].childNodes[i].appendChild(document.createTextNode(this.inputNames[i]));
@@ -99,19 +59,40 @@ class TruthTable {
                 );
             }
         }
-
-        table.replaceChild(thead, table.children[0]);
-        table.replaceChild(tbody, table.children[1]);
     }
+
     getDNF(){
-        let nodeArray = new Array();
-        let inputArray = new Array();
+        let nodeArray = new Array(2*this.nInput + (1 << this.nInput) + this.nOutput).fill().map(() => []);
+        let inputArray = new Array(2*this.nInput + (1 << this.nInput) + this.nOutput).fill().map(() => []);
+
         for(let i = 0; i < this.nInput; i++){
-            nodeArray.push();
+            nodeArray.push(['in']);
+            nodeArray.push(['not']);
         }
+        for(let i = 0; i < (1 << this.nInput); i++){
+            nodeArray.push(['and']);
+        }
+        for(let i = 0; i < this.nOutput; i++){
+            nodeArray.push(['or']);
+        }
+
+        for(let i = 0; i < this.nInput; i++){
+            inputArray[2*i+1].push(2*i);
+        }
+        for(let i = 0; i < (1 << this.nInput); i++){
+            for(let j = 0; j < this.nInput; j++){
+                if((i >> j) & 1) inputArray[2*this.nInput + i].push(2*j);
+                else inputArray[2*this.nInput + i].push(2*i+1);
+            }
+            for(let j = 0; j < this.nOutput; j++){
+                if(this.outArray[i][j] == 1) inputArray[2*this.nInput + (1 << this.nInput) + j].push(2*this.nInput + i);
+            }
+        }
+        
+        return [nodeArray, inputArray];
     }
 }
 
-const truthTable = new TruthTable();
+const tt = new TruthTable();
 
-export { truthTable };
+export { thead, tt };
