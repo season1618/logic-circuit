@@ -58,8 +58,8 @@ class TruthTable {
     }
 
     getDNF(){
-        let nodeArray = new Array(2*this.nInput + (1 << this.nInput) + this.nOutput).fill().map(() => []);
-        let inputArray = new Array(2*this.nInput + (1 << this.nInput) + this.nOutput).fill().map(() => []);
+        let nodeArray = new Array();
+        let inputArray = new Array(2*this.nInput + (1 << this.nInput) + 2*this.nOutput).fill().map(() => []);
 
         for(let i = 0; i < this.nInput; i++){
             nodeArray.push(['in']);
@@ -70,6 +70,7 @@ class TruthTable {
         }
         for(let i = 0; i < this.nOutput; i++){
             nodeArray.push(['or']);
+            nodeArray.push(['out']);
         }
 
         for(let i = 0; i < this.nInput; i++){
@@ -78,13 +79,15 @@ class TruthTable {
         for(let i = 0; i < (1 << this.nInput); i++){
             for(let j = 0; j < this.nInput; j++){
                 if((i >> j) & 1) inputArray[2*this.nInput + i].push(2*j);
-                else inputArray[2*this.nInput + i].push(2*i+1);
+                else inputArray[2*this.nInput + i].push(2*j+1);
             }
             for(let j = 0; j < this.nOutput; j++){
-                if(this.outArray[i][j] == 1) inputArray[2*this.nInput + (1 << this.nInput) + j].push(2*this.nInput + i);
+                if(this.outArray[i][j] == 1) inputArray[2*this.nInput + (1 << this.nInput) + 2*j].push(2*this.nInput + i);
             }
         }
-        
+        for(let i = 0; i < this.nOutput; i++){
+            inputArray[2*this.nInput + (1 << this.nInput) + 2*i+1].push(2*this.nInput + (1 << this.nInput) + 2*i);
+        }
         return [nodeArray, inputArray];
     }
 }

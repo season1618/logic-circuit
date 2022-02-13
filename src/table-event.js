@@ -1,3 +1,4 @@
+import { cir } from './circuit.js';
 import { thead, tbody, tt } from './truth-table.js';
 
 thead.addEventListener(
@@ -30,15 +31,23 @@ thead.addEventListener(
         let posCel = e.offsetX / width;
         if(celCount < tt.nInput){
             if(0.2 < posCel && posCel < 0.8){
-                if(tt.nInput > 1) tt.setTable(tt.nInput - 1, tt.nOutput);
+                if(tt.nInput > 1){
+                    tt.setTable(tt.nInput - 1, tt.nOutput);
+                    cir.setCircuit(...tt.getDNF());
+                }
             }else{
                 tt.setTable(tt.nInput + 1, tt.nOutput);
+                cir.setCircuit(...tt.getDNF());
             }
         }else{
             if(0.2 < posCel && posCel < 0.8){
-                if(tt.nOutput > 1) tt.setTable(tt.nInput, tt.nOutput - 1);
+                if(tt.nOutput > 1){
+                    tt.setTable(tt.nInput, tt.nOutput - 1);
+                    cir.setCircuit(...tt.getDNF());
+                }
             }else{
                 tt.setTable(tt.nInput, tt.nOutput + 1);
+                cir.setCircuit(...tt.getDNF());
             }
         }
     }
@@ -48,11 +57,12 @@ tbody.addEventListener(
     'click',
     function(e){
         let i = e.target.getAttribute('row');
-        let j = e.target.getAttribute('column');
+        let j = e.target.getAttribute('column') - tt.nInput;
         
-        if(j >= tt.nInput){
+        if(j >= 0){
             tt.outArray[i][j] ^= 1;
             e.target.textContent = tt.outArray[i][j];
+            cir.setCircuit(...tt.getDNF());
         }
     }
 );
