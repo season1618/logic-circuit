@@ -1,4 +1,6 @@
-# logic circuit
+# logic circuit 論理回路シミュレータ
+
+ブラウザ上で論理回路と真理値表を作成できる。論理回路と真理値表は双方向データ結合される。
 
 ## 操作
 
@@ -14,5 +16,8 @@
 
 - ボタン
     + align: 論理回路の整列。各要素のy座標の位置関係を保つ
-    + optimize: 論理回路の簡単化
     + .png: 論理回路のpng画像をエクスポート
+
+    + DNF, disjunctive normal form: 選言標準形
+    + CNF, conjunctive normal form: 連言標準形
+    + optimize: 論理回路の簡単化
