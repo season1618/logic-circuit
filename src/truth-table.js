@@ -104,6 +104,11 @@ class TruthTable {
         table.replaceChild(tbody, table.children[1]);
     }
     getDNF(){
+        let nodeArray = new Array();
+        let inputArray = new Array();
+        for(let i = 0; i < this.nInput; i++){
+            nodeArray.push();
+        }
     }
 }
 

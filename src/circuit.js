@@ -1,5 +1,4 @@
 import { canvas, ctx, scale } from './canvas.js';
-import { truthTable } from './truth-table.js';
 
 class Node {
     constructor(kind, x = 0, y = 0){
@@ -155,7 +154,7 @@ class Circuit extends Array {
         this.nInput = 0;
         this.nOutput = 0;
         for(let i = 0; i < nodeArray.length; i++){
-            this.push(nodeArray[i]);
+            this.push(new Node(...nodeArray[i]));
             if(this[i].kind == 'in') this.nInput++;
             else if(this[i].kind == 'out') this.nOutput++;
         }
@@ -166,7 +165,7 @@ class Circuit extends Array {
             }
         }
         this.align();
-        
+        this.render();
     }
 
     add(node){

@@ -1,4 +1,4 @@
-import { Node, cir } from './circuit.js';
+import { cir } from './circuit.js';
 import './edit-circuit.js';
 import { truthTable } from './truth-table.js';
 
@@ -25,14 +25,14 @@ document.getElementById('png').addEventListener(
 // half adder
 cir.setCircuit(
     [
-        new Node('in', 0, 100),
-        new Node('in', 0, 200),
-        new Node('or', 100, 100),
-        new Node('and', 100, 200),
-        new Node('not', 200, 200),
-        new Node('and', 300, 150),
-        new Node('out', 400, 100),
-        new Node('out', 400, 200)
+        ['in', 0, 100],
+        ['in', 0, 200],
+        ['or', 100, 100],
+        ['and', 100, 200],
+        ['not', 200, 200],
+        ['and', 300, 150],
+        ['out', 400, 100],
+        ['out', 400, 200]
     ],
     [
         [],
@@ -45,5 +45,4 @@ cir.setCircuit(
         [3]
     ]
 );
-cir.render();
 truthTable.setTable(...cir.getTruthTable());
