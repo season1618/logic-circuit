@@ -43,20 +43,16 @@ class TruthTable {
             // input
             for(let j = 0; j < this.nInput; j++){
                 tbody.childNodes[i].appendChild(document.createElement('td'));
+                tbody.childNodes[i].childNodes[j].setAttribute('row', i);
+                tbody.childNodes[i].childNodes[j].setAttribute('column', j);
                 tbody.childNodes[i].childNodes[j].appendChild(document.createTextNode((i >> nInput - 1 - j) & 1));
             }
             // output
             for(let j = 0; j < this.nOutput; j++){
                 tbody.childNodes[i].appendChild(document.createElement('td'));
+                tbody.childNodes[i].childNodes[j + this.nInput].setAttribute('row', i);
+                tbody.childNodes[i].childNodes[j + this.nInput].setAttribute('column', j + this.nInput);
                 tbody.childNodes[i].childNodes[j + this.nInput].appendChild(document.createTextNode(this.outArray[i][j]));
-                let t = this;
-                tbody.childNodes[i].childNodes[j + this.nInput].addEventListener(
-                    'click',
-                    function(e){
-                        t.outArray[i][j] ^= 1;
-                        e.target.textContent = t.outArray[i][j];
-                    }
-                );
             }
         }
     }
@@ -95,4 +91,4 @@ class TruthTable {
 
 const tt = new TruthTable();
 
-export { thead, tt };
+export { thead, tbody, tt };

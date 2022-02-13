@@ -1,4 +1,4 @@
-import { thead, tt } from './truth-table.js';
+import { thead, tbody, tt } from './truth-table.js';
 
 thead.addEventListener(
     'mouseover',
@@ -40,6 +40,19 @@ thead.addEventListener(
             }else{
                 tt.setTable(tt.nInput, tt.nOutput + 1);
             }
+        }
+    }
+);
+
+tbody.addEventListener(
+    'click',
+    function(e){
+        let i = e.target.getAttribute('row');
+        let j = e.target.getAttribute('column');
+        
+        if(j >= tt.nInput){
+            tt.outArray[i][j] ^= 1;
+            e.target.textContent = tt.outArray[i][j];
         }
     }
 );
