@@ -6,7 +6,18 @@ const wait = async (ms) => {
     );
 }
 
-async function morphing(){
+async function increasing(){
+    let nInput = document.querySelector("tbody tr").children.length - 1;
+    for(let i = 1; i < (1 << (1 << nInput)); i++){
+        await wait(100);
+        let d = (i-1) ^ i;
+        for(let j = 0; j < (1 << nInput); j++){
+            if((d >> j) & 1) document.querySelector("td[row='" + j + "'][column='" + nInput + "']").click();
+        }
+    }
+}
+
+async function graycode(){
     let nInput = document.querySelector("tbody tr").children.length - 1;
     for(let i = 1; i < (1 << (1 << nInput)); i++){
         await wait(100);
@@ -18,5 +29,3 @@ async function morphing(){
         }
     }
 }
-
-morphing();
