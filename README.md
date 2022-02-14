@@ -1,6 +1,8 @@
 # logic circuit 論理回路シミュレータ
 
 ブラウザ上で論理回路と真理値表を作成する。
+https://season1618.github.io/logic-circuit/
+https://github.com/season1618/logic-circuit/blob/6733ecd3e0813ebf2549955ebfc32265b8f4e179/public/favicon.png
 
 ## 操作
 
@@ -24,6 +26,6 @@
 
     + DNF, disjunctive normal form: 選言標準形
     + CNF, conjunctive normal form: 連言標準形
-    + minimize: Quine-McCluskey法による論理回路の簡単化
+    + minimize: Quine-McCluskey法による論理回路の簡単化。出力が一個のときのみ。
 
     + .png: 論理回路のpng画像をエクスポート
