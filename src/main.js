@@ -10,6 +10,7 @@ document.getElementById('align').addEventListener(
     'click',
     function(){
         cir.align();
+        cir.render();
         tt.setTable(...cir.getTruthTable());
     }
 );
@@ -18,6 +19,8 @@ document.getElementById('dnf').addEventListener(
     'click',
     function(){
         cir.setCircuit(...tt.getDNF());
+        cir.align();
+        cir.render();
     }
 );
 
@@ -54,4 +57,6 @@ cir.setCircuit(
         [3]
     ]
 );
+cir.align();
+cir.render();
 tt.setTable(...cir.getTruthTable());

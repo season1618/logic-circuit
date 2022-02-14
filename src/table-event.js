@@ -34,20 +34,28 @@ thead.addEventListener(
                 if(tt.nInput > 1){
                     tt.setTable(tt.nInput - 1, tt.nOutput);
                     cir.setCircuit(...tt.getDNF());
+                    cir.align();
+                    cir.render();
                 }
             }else{
                 tt.setTable(tt.nInput + 1, tt.nOutput);
                 cir.setCircuit(...tt.getDNF());
+                cir.align();
+                cir.render();
             }
         }else{
             if(0.2 < posCel && posCel < 0.8){
                 if(tt.nOutput > 1){
                     tt.setTable(tt.nInput, tt.nOutput - 1);
                     cir.setCircuit(...tt.getDNF());
+                    cir.align();
+                    cir.render();
                 }
             }else{
                 tt.setTable(tt.nInput, tt.nOutput + 1);
                 cir.setCircuit(...tt.getDNF());
+                cir.align();
+                cir.render();
             }
         }
     }
@@ -63,6 +71,8 @@ tbody.addEventListener(
             tt.outArray[i][j] ^= 1;
             e.target.textContent = tt.outArray[i][j];
             cir.setCircuit(...tt.getDNF());
+            cir.align();
+            cir.render();
         }
     }
 );

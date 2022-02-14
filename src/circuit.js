@@ -177,8 +177,6 @@ class Circuit extends Array {
                 this[i].input.push(this[inputArray[i][j]]);
             }
         }
-        this.align();
-        this.render();
     }
 
     translate(mouseMoveX, mouseMoveY){
@@ -304,7 +302,6 @@ class Circuit extends Array {
             }
             this[i].y = this[i].gridY * H - (nRow[this[i].gridX] - 1)/2 * H + canvas.height / 2;
         }
-        this.render();
     }
     
     render(){
