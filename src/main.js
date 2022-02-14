@@ -37,6 +37,19 @@ document.getElementById('cnf').addEventListener(
     }
 );
 
+document.getElementById('minimize').addEventListener(
+    'click',
+    function(){
+        setCircuitForm(MINIMIZE);
+        if(tt.nOutput == 1){
+            let [nodeArray, inputArray] = tt.getMinimum();
+            cir.setCircuit(nodeArray, inputArray);
+            cir.align();
+            cir.render();
+        }
+    }
+)
+
 document.getElementById('png').addEventListener(
     'click',
     function(){

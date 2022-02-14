@@ -25,9 +25,11 @@ function makeCirucit(){
             cir.align(nodeGridPos);
             break;
         case MINIMIZE:
-            [nodeArray, inputArray] = tt.getDNF();
-            cir.setCircuit(nodeArray, inputArray);
-            cir.align();
+            if(tt.nOutput == 1){
+                [nodeArray, inputArray] = tt.getMinimum();
+                cir.setCircuit(nodeArray, inputArray);
+                cir.align();
+            }
             break;
     }
     cir.render();

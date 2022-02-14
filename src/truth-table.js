@@ -84,7 +84,7 @@ class TruthTable {
         }
         for(let i = 0; i < (1 << this.nInput); i++){
             for(let j = 0; j < this.nInput; j++){
-                if((i >> j) & 1) inputArray[2*this.nInput + i].push(2*j);
+                if((i >> this.nInput - 1 - j) & 1) inputArray[2*this.nInput + i].push(2*j);
                 else inputArray[2*this.nInput + i].push(2*j+1);
             }
             for(let j = 0; j < this.nOutput; j++){
@@ -124,7 +124,7 @@ class TruthTable {
         }
         for(let i = 0; i < (1 << this.nInput); i++){
             for(let j = 0; j < this.nInput; j++){
-                if((i >> j) & 1) inputArray[2*this.nInput + i].push(2*j+1);
+                if((i >> this.nInput - 1 - j) & 1) inputArray[2*this.nInput + i].push(2*j+1);
                 else inputArray[2*this.nInput + i].push(2*j);
             }
             for(let j = 0; j < this.nOutput; j++){
@@ -135,6 +135,151 @@ class TruthTable {
             inputArray[2*this.nInput + (1 << this.nInput) + 2*i+1].push(2*this.nInput + (1 << this.nInput) + 2*i);
         }
         return [nodeArray, inputArray, nodeGridPos];
+    }
+
+    getMinimum(){
+        // Quine-McCluskey Algorithm
+
+        let nInput = this.nInput;
+
+        let minterms = [];
+        let imps = new Array(this.nInput + 1).fill().map(() => []);
+        for(let i = 0; i < (1 << this.nInput); i++){
+            if(this.outArray[i] == 1){
+                minterms.push(i);
+                let cnt = 0;
+                let arr = [];
+                for(let j = 0; j < this.nInput; j++){
+                    cnt += (i >> j) & 1;
+                    arr.push((i >> this.nInput - 1 - j) & 1);
+                }
+                arr.isMerged = false;
+                imps[cnt].push(arr);
+            }
+        }
+
+        let primImps = [];
+        while(true){
+            imps = calc(imps);
+            let sum = 0;
+            for(let i = 0; i <= this.nInput; i++) sum += imps[i].length;
+            if(sum == 0) break;
+        }
+
+        let nAndGate = this.nInput; let comb = 0;
+        for(let i = 0; i < (1 << primImps.length); i++){
+            let st = new Set();
+            let cnt = 0;
+            for(let j = 0; j < primImps.length; j++){
+                if((i >> j) & 1){
+                    binaryToDecimal(primImps[j]).forEach((e) => st.add(e));
+                    cnt++;
+                }
+            }
+            if(st.size == minterms.length && cnt < nAndGate){
+                nAndGate = cnt;
+                comb = i;
+            }
+        }
+        primImps = primImps.filter((e, j) => ((comb >> j) & 1));
+
+        let nodeArray = [];
+        let inputArray = [];
+        for(let i = 0; i < this.nInput; i++){
+            nodeArray.push(['in']);
+            inputArray.push([]);
+        }
+        let notGate = new Array(this.nInput).fill(-1);
+        let k = this.nInput;
+        for(let i = 0; i < primImps.length; i++){
+            for(let j = 0; j < this.nInput; j++){
+                if(primImps[i][j] == 0 && notGate[j] == -1){
+                    notGate[j] = k;
+                    nodeArray.push(['not']);
+                    inputArray.push([j]);
+                    k++;
+                }
+            }
+        }console.log(notGate, k);
+        for(let i = 0; i < primImps.length; i++){
+            nodeArray.push(['and']);
+            inputArray.push([]);
+            for(let j = 0; j < this.nInput; j++){
+                if(primImps[i][j] == 0){
+                    inputArray[k + i].push(notGate[j]);
+                }else if(primImps[i][j] == 1){
+                    inputArray[k + i].push(j);
+                }
+            }
+            
+        }
+        nodeArray.push(['or']);
+        inputArray.push([]);
+        for(let i = 0; i < primImps.length; i++) inputArray[k + primImps.length].push(k + i);
+        nodeArray.push(['out']);
+        inputArray.push([k + primImps.length]);console.log(nodeArray, inputArray);
+
+        return [nodeArray, inputArray];
+
+        function calc(imps){
+            let ret = new Array(nInput + 1).fill().map(() => []);
+            for(let i = 0; i < nInput; i++){
+                for(let j = 0; j < imps[i].length; j++){
+                    for(let k = 0; k < imps[i+1].length; k++){
+                        let hamDist = 0;
+                        let flag = false;
+                        for(let l = 0; l < nInput; l++){
+                            if((imps[i][j][l] == -1) ^ (imps[i+1][k][l] == -1)){
+                                flag = true;
+                                break;
+                            }
+                            if(imps[i][j][l] >= 0 && imps[i+1][k][l] >= 0){
+                                hamDist += imps[i][j][l] ^ imps[i+1][k][l];
+                            }
+                        }
+                        if(flag) continue;
+                        if(hamDist == 1){
+                            let arr = [];
+                            for(let l = 0; l < nInput; l++){
+                                if(imps[i][j][l] != imps[i+1][k][l]) arr.push(-1);
+                                else arr.push(imps[i][j][l]);
+                            }
+                            imps[i][j].isMerged = true;
+                            imps[i+1][k].isMerged = true;
+                            arr.isMerged = false;
+                            ret[i].push(arr);
+                        }
+                    }
+                }
+            }
+            for(let i = 0; i <= nInput; i++){
+                for(let j = 0; j < imps[i].length; j++){
+                    if(!imps[i][j].isMerged) primImps.push(imps[i][j]);
+                }
+            }
+            return ret;
+        }
+
+        function binaryToDecimal(arr){
+            let cnt = 0;
+            for(let i = 0; i < nInput; i++){
+                if(arr[i] == -1) cnt++;
+            }
+            let ret = [];
+            for(let i = 0; i < (1 << cnt); i++){
+                let value = 0; let k = 0;
+                for(let j = 0; j < nInput; j++){
+                    if(arr[j] == -1){
+                        value = 2 * value + ((i >> k) & 1);
+                        k++;
+                    }else{
+                        value = 2 * value + arr[j];
+                    }
+                }
+                ret.push(value);
+            }
+            return ret;
+        }
     }
 }
 
