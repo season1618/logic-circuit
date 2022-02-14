@@ -309,7 +309,8 @@ class Circuit extends Array {
                     this[i].x = this[i].gridX * W + 0.5 * canvasScale - (this.nColumn - 1)/2 * W + canvas.width / 2;
                     break;
             }
-            this[i].y = this[i].gridY * H - (nRow[this[i].gridX] - 1)/2 * H + canvas.height / 2;
+            if(this[i].kind == 'not' && this[i].input.length > 0) this[i].y = this[i].input[0].y + H / 2;
+            else this[i].y = this[i].gridY * H - (nRow[this[i].gridX] - 1)/2 * H + canvas.height / 2;
         }
     }
     
