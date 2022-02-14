@@ -26,9 +26,9 @@ function makeCirucit(){
             break;
         case MINIMIZE:
             if(tt.nOutput == 1){
-                [nodeArray, inputArray] = tt.getMinimum();
-                cir.setCircuit(nodeArray, inputArray);
-                cir.align();
+                [nodeArray, inputArray, nodeGridPos] = tt.getMinimum();
+                cir.setCircuit(nodeArray, inputArray, nodeGridPos);
+                cir.align(nodeGridPos);
             }
             break;
     }

@@ -42,9 +42,9 @@ document.getElementById('minimize').addEventListener(
     function(){
         setCircuitForm(MINIMIZE);
         if(tt.nOutput == 1){
-            let [nodeArray, inputArray] = tt.getMinimum();
-            cir.setCircuit(nodeArray, inputArray);
-            cir.align();
+            let [nodeArray, inputArray, nodeGridPos] = tt.getMinimum();
+            cir.setCircuit(nodeArray, inputArray, nodeGridPos);
+            cir.align(nodeGridPos);
             cir.render();
         }
     }

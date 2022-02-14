@@ -166,7 +166,7 @@ class TruthTable {
             if(sum == 0) break;
         }
 
-        let nAndGate = this.nInput; let comb = 0;
+        let nAndGate = this.nInput + 1; let comb = 0;
         for(let i = 0; i < (1 << primImps.length); i++){
             let st = new Set();
             let cnt = 0;
@@ -185,8 +185,10 @@ class TruthTable {
 
         let nodeArray = [];
         let inputArray = [];
+        let nodeGridPos = [];
         for(let i = 0; i < this.nInput; i++){
             nodeArray.push(['in']);
+            nodeGridPos.push([0, i]);
             inputArray.push([]);
         }
         let notGate = new Array(this.nInput).fill(-1);
@@ -196,6 +198,7 @@ class TruthTable {
                 if(primImps[i][j] == 0 && notGate[j] == -1){
                     notGate[j] = k;
                     nodeArray.push(['not']);
+                    nodeGridPos.push([1, k-this.nInput]);
                     inputArray.push([j]);
                     k++;
                 }
@@ -203,6 +206,7 @@ class TruthTable {
         }
         for(let i = 0; i < primImps.length; i++){
             nodeArray.push(['and']);
+            nodeGridPos.push([2, i]);
             inputArray.push([]);
             for(let j = 0; j < this.nInput; j++){
                 if(primImps[i][j] == 0){
@@ -214,12 +218,14 @@ class TruthTable {
             
         }
         nodeArray.push(['or']);
+        nodeGridPos.push([3, 0]);
         inputArray.push([]);
         for(let i = 0; i < primImps.length; i++) inputArray[k + primImps.length].push(k + i);
         nodeArray.push(['out']);
+        nodeGridPos.push([4, 0]);
         inputArray.push([k + primImps.length]);
 
-        return [nodeArray, inputArray];
+        return [nodeArray, inputArray, nodeGridPos];
 
         function calc(imps){
             let ret = new Array(nInput + 1).fill().map(() => []);
