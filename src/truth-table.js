@@ -200,7 +200,7 @@ class TruthTable {
                     k++;
                 }
             }
-        }console.log(notGate, k);
+        }
         for(let i = 0; i < primImps.length; i++){
             nodeArray.push(['and']);
             inputArray.push([]);
@@ -217,7 +217,7 @@ class TruthTable {
         inputArray.push([]);
         for(let i = 0; i < primImps.length; i++) inputArray[k + primImps.length].push(k + i);
         nodeArray.push(['out']);
-        inputArray.push([k + primImps.length]);console.log(nodeArray, inputArray);
+        inputArray.push([k + primImps.length]);
 
         return [nodeArray, inputArray];
 
