@@ -11,6 +11,28 @@ function setCircuitForm(x){
     CIRCUIT_FORM = x;
 }
 
+function makeCirucit(){
+    let nodeArray, inputArray, nodeGridPos;
+    switch(CIRCUIT_FORM){
+        case DNF:
+            [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
+            cir.setCircuit(nodeArray, inputArray);
+            cir.align(nodeGridPos);
+            break;
+        case CNF:
+            [nodeArray, inputArray, nodeGridPos] = tt.getCNF();
+            cir.setCircuit(nodeArray, inputArray);
+            cir.align(nodeGridPos);
+            break;
+        case OPTIMIZE:
+            [nodeArray, inputArray] = tt.getDNF();
+            cir.setCircuit(nodeArray, inputArray);
+            cir.align();
+            break;
+    }
+    cir.render();
+}
+
 thead.addEventListener(
     'mouseover',
     function(e){
@@ -43,33 +65,21 @@ thead.addEventListener(
             if(0.2 < posCel && posCel < 0.8){
                 if(tt.nInput > 1){
                     tt.setTable(tt.nInput - 1, tt.nOutput);
-                    let [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
-                    cir.setCircuit(nodeArray, inputArray);
-                    cir.align(nodeGridPos);
-                    cir.render();
+                    makeCirucit();
                 }
             }else{
                 tt.setTable(tt.nInput + 1, tt.nOutput);
-                let [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
-                cir.setCircuit(nodeArray, inputArray);
-                cir.align(nodeGridPos);
-                cir.render();
+                makeCirucit();
             }
         }else{
             if(0.2 < posCel && posCel < 0.8){
                 if(tt.nOutput > 1){
                     tt.setTable(tt.nInput, tt.nOutput - 1);
-                    let [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
-                    cir.setCircuit(nodeArray, inputArray);
-                    cir.align(nodeGridPos);
-                    cir.render();
+                    makeCirucit();
                 }
             }else{
                 tt.setTable(tt.nInput, tt.nOutput + 1);
-                let [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
-                cir.setCircuit(nodeArray, inputArray);
-                cir.align(nodeGridPos);
-                cir.render();
+                makeCirucit();
             }
         }
     }
@@ -84,25 +94,7 @@ tbody.addEventListener(
         if(j >= 0){
             tt.outArray[i][j] ^= 1;
             e.target.textContent = tt.outArray[i][j];
-            let nodeArray, inputArray, nodeGridPos;
-            switch(CIRCUIT_FORM){
-                case DNF:
-                    [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
-                    cir.setCircuit(nodeArray, inputArray);
-                    cir.align(nodeGridPos);
-                    break;
-                case CNF:
-                    [nodeArray, inputArray, nodeGridPos] = tt.getCNF();
-                    cir.setCircuit(nodeArray, inputArray);
-                    cir.align(nodeGridPos);
-                    break;
-                case OPTIMIZE:
-                    [nodeArray, inputArray] = tt.getDNF();
-                    cir.setCircuit(nodeArray, inputArray);
-                    cir.align();
-                    break;
-            }
-            cir.render();
+            makeCirucit();
         }
     }
 );
