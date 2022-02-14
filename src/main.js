@@ -1,5 +1,5 @@
 import { cir } from './circuit.js';
-import './edit-circuit.js';
+import './canvas-event.js';
 import { tt } from './truth-table.js';
 import { DNF, CNF, MINIMIZE, CIRCUIT_FORM, setCircuitForm } from './table-event.js';
 
