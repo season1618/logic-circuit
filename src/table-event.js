@@ -1,6 +1,16 @@
 import { cir } from './circuit.js';
 import { thead, tbody, tt } from './truth-table.js';
 
+const DNF = 0;
+const CNF = 1;
+const OPTIMIZE = 2;
+
+let CIRCUIT_FORM = DNF;
+
+function setCircuitForm(x){
+    CIRCUIT_FORM = x;
+}
+
 thead.addEventListener(
     'mouseover',
     function(e){
@@ -74,10 +84,27 @@ tbody.addEventListener(
         if(j >= 0){
             tt.outArray[i][j] ^= 1;
             e.target.textContent = tt.outArray[i][j];
-            let [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
-            cir.setCircuit(nodeArray, inputArray);
-            cir.align(nodeGridPos);
+            let nodeArray, inputArray, nodeGridPos;
+            switch(CIRCUIT_FORM){
+                case DNF:
+                    [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
+                    cir.setCircuit(nodeArray, inputArray);
+                    cir.align(nodeGridPos);
+                    break;
+                case CNF:
+                    [nodeArray, inputArray, nodeGridPos] = tt.getCNF();
+                    cir.setCircuit(nodeArray, inputArray);
+                    cir.align(nodeGridPos);
+                    break;
+                case OPTIMIZE:
+                    [nodeArray, inputArray] = tt.getDNF();
+                    cir.setCircuit(nodeArray, inputArray);
+                    cir.align();
+                    break;
+            }
             cir.render();
         }
     }
 );
+
+export { DNF, CNF, OPTIMIZE, CIRCUIT_FORM, setCircuitForm };

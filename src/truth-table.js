@@ -96,6 +96,46 @@ class TruthTable {
         }
         return [nodeArray, inputArray, nodeGridPos];
     }
+
+    getCNF(){
+        let nodeArray = new Array();
+        let inputArray = new Array(2*this.nInput + (1 << this.nInput) + 2*this.nOutput).fill().map(() => []);
+        let nodeGridPos = new Array();
+
+        for(let i = 0; i < this.nInput; i++){
+            nodeArray.push(['in']);
+            nodeArray.push(['not']);
+            nodeGridPos.push([0, i]);
+            nodeGridPos.push([1, i]);
+        }
+        for(let i = 0; i < (1 << this.nInput); i++){
+            nodeArray.push(['or']);
+            nodeGridPos.push([2, i]);
+        }
+        for(let i = 0; i < this.nOutput; i++){
+            nodeArray.push(['and']);
+            nodeArray.push(['out']);
+            nodeGridPos.push([3, i]);
+            nodeGridPos.push([4, i]);
+        }
+
+        for(let i = 0; i < this.nInput; i++){
+            inputArray[2*i+1].push(2*i);
+        }
+        for(let i = 0; i < (1 << this.nInput); i++){
+            for(let j = 0; j < this.nInput; j++){
+                if((i >> j) & 1) inputArray[2*this.nInput + i].push(2*j+1);
+                else inputArray[2*this.nInput + i].push(2*j);
+            }
+            for(let j = 0; j < this.nOutput; j++){
+                if(this.outArray[i][j] == 0) inputArray[2*this.nInput + (1 << this.nInput) + 2*j].push(2*this.nInput + i);
+            }
+        }
+        for(let i = 0; i < this.nOutput; i++){
+            inputArray[2*this.nInput + (1 << this.nInput) + 2*i+1].push(2*this.nInput + (1 << this.nInput) + 2*i);
+        }
+        return [nodeArray, inputArray, nodeGridPos];
+    }
 }
 
 const tt = new TruthTable();

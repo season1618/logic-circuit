@@ -1,7 +1,7 @@
 import { cir } from './circuit.js';
 import './edit-circuit.js';
 import { tt } from './truth-table.js';
-import './table-event.js';
+import { DNF, CNF, OPTIMIZE, CIRCUIT_FORM, setCircuitForm } from './table-event.js';
 
 //document.getElementById('optimize');
 // let playButton = document.getElementById('play');
@@ -18,7 +18,19 @@ document.getElementById('align').addEventListener(
 document.getElementById('dnf').addEventListener(
     'click',
     function(){
+        setCircuitForm(DNF);
         let [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
+        cir.setCircuit(nodeArray, inputArray);
+        cir.align(nodeGridPos);
+        cir.render();
+    }
+);
+
+document.getElementById('cnf').addEventListener(
+    'click',
+    function(){
+        setCircuitForm(CNF);
+        let [nodeArray, inputArray, nodeGridPos] = tt.getCNF();
         cir.setCircuit(nodeArray, inputArray);
         cir.align(nodeGridPos);
         cir.render();
