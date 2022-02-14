@@ -1,8 +1,9 @@
 # logic circuit 論理回路シミュレータ
 
 ブラウザ上で論理回路と真理値表を作成する。
+
 https://season1618.github.io/logic-circuit/
-https://github.com/season1618/logic-circuit/blob/6733ecd3e0813ebf2549955ebfc32265b8f4e179/public/favicon.png
+![](https://github.com/season1618/logic-circuit/blob/6733ecd3e0813ebf2549955ebfc32265b8f4e179/public/favicon.png)
 
 ## 操作
 
@@ -29,3 +30,7 @@ https://github.com/season1618/logic-circuit/blob/6733ecd3e0813ebf2549955ebfc3226
     + minimize: Quine-McCluskey法による論理回路の簡単化。出力が一個のときのみ。
 
     + .png: 論理回路のpng画像をエクスポート
+
+## モーフィング
+
+![](https://github.com/season1618/logic-circuit/blob/4e1937633b383c9f901de2eebf33c8ccb035b202/public/morphing.gif)
