@@ -1,10 +1,7 @@
 import { cir } from './circuit.js';
 import './canvas-event.js';
 import { tt } from './truth-table.js';
-import { DNF, CNF, MINIMIZE, CIRCUIT_FORM, setCircuitForm } from './table-event.js';
-
-//document.getElementById('optimize');
-// let playButton = document.getElementById('play');
+import { DNF, CNF, MINIMIZE, setCircuitForm } from './table-event.js';
 
 document.getElementById('align').addEventListener(
     'click',

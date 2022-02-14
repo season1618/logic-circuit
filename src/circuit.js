@@ -213,6 +213,7 @@ class Circuit extends Array {
             this[i].isVisited = false;
             this[i].gridX = 0;
         }
+        this.nColumn = 0;
         for(let i = 0; i < this.length; i++){
             if(!this[i].isVisited){
                 dfs(this[i]);

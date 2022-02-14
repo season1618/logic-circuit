@@ -156,6 +156,26 @@ canvas.addEventListener(
     'dblclick',
     function(e){
         if(state == DEFAULT){
+            for(let i = 0; i < cir.length; i++){
+                if(cir[i].include(e.clientX, e.clientY)){
+                    if(cir[i].kind == 'in'){
+                        if(cir.nInput > 1) cir.nInput--;
+                        else return;
+                    }else if(cir[i].kind == 'out'){
+                        if(cir.nOutput > 1) cir.nOutput--;
+                        else return;
+                    }
+                    for(let j = 0; j < cir.length; j++){
+                        let id = cir[j].input.indexOf(cir[i]);
+                        if(id != -1) cir[j].input.splice(id, 1);
+                    }
+                    cir.splice(i, 1);
+                    cir.align();
+                    cir.render();
+                    tt.setTable(...cir.getTruthTable());
+                    return;
+                }
+            }
             state = LOGIC_GATE_ADD;
             num = 2;
             node = new Node('not', e.clientX, e.clientY);
