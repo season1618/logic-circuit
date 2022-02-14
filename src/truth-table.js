@@ -60,17 +60,23 @@ class TruthTable {
     getDNF(){
         let nodeArray = new Array();
         let inputArray = new Array(2*this.nInput + (1 << this.nInput) + 2*this.nOutput).fill().map(() => []);
+        let nodeGridPos = new Array();
 
         for(let i = 0; i < this.nInput; i++){
             nodeArray.push(['in']);
             nodeArray.push(['not']);
+            nodeGridPos.push([0, i]);
+            nodeGridPos.push([1, i]);
         }
         for(let i = 0; i < (1 << this.nInput); i++){
             nodeArray.push(['and']);
+            nodeGridPos.push([2, i]);
         }
         for(let i = 0; i < this.nOutput; i++){
             nodeArray.push(['or']);
             nodeArray.push(['out']);
+            nodeGridPos.push([3, i]);
+            nodeGridPos.push([4, i]);
         }
 
         for(let i = 0; i < this.nInput; i++){
@@ -88,7 +94,7 @@ class TruthTable {
         for(let i = 0; i < this.nOutput; i++){
             inputArray[2*this.nInput + (1 << this.nInput) + 2*i+1].push(2*this.nInput + (1 << this.nInput) + 2*i);
         }
-        return [nodeArray, inputArray];
+        return [nodeArray, inputArray, nodeGridPos];
     }
 }
 

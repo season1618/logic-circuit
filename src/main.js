@@ -18,8 +18,9 @@ document.getElementById('align').addEventListener(
 document.getElementById('dnf').addEventListener(
     'click',
     function(){
-        cir.setCircuit(...tt.getDNF());
-        cir.align();
+        let [nodeArray, inputArray, nodeGridPos] = tt.getDNF();
+        cir.setCircuit(nodeArray, inputArray);
+        cir.align(nodeGridPos);
         cir.render();
     }
 );

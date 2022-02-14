@@ -274,11 +274,20 @@ class Circuit extends Array {
             this[l + k] = tempArray[k];
         }
     }
-    align(){
-        for(let i = 0; i < this.length; i++) this[i].sort();
-        this.calcGridX();
-        this.sort();
-        this.calcGridY();
+    align(nodeGridPos = null){
+        if(nodeGridPos == null){
+            for(let i = 0; i < this.length; i++) this[i].sort();
+            this.calcGridX();
+            this.sort();
+            this.calcGridY();
+        }else{
+            this.nColumn = 0;
+            for(let i = 0; i < this.length; i++){
+                this[i].gridX = nodeGridPos[i][0];
+                this[i].gridY = nodeGridPos[i][1];
+                this.nColumn = Math.max(this.nColumn, this[i].gridX + 1);
+            }
+        }
 
         let nRow = new Array(this.nColumn).fill(0);
         for(let i = 0; i < this.length; i++){
