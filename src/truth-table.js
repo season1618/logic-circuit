@@ -166,7 +166,7 @@ class TruthTable {
             if(sum == 0) break;
         }
 
-        let nAndGate = this.nInput + 1; let comb = 0;
+        let nAndGate = minterms.length + 1; let comb = 0;
         for(let i = 0; i < (1 << primImps.length); i++){
             let st = new Set();
             let cnt = 0;
