@@ -1,6 +1,6 @@
-import { canvas, ctx } from './canvas.js';
-import { canvasScale, Node, cir } from './circuit.js';
-import { tt } from './truth-table.js';
+import { canvas, ctx } from './modules/canvas.js';
+import { canvasScale, Node, cir } from './modules/circuit.js';
+import { tt } from './modules/truth-table.js';
 
 let DEFAULT = 0;
 let LOGIC_GATE_MOVE = 1;

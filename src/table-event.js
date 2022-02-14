@@ -1,5 +1,5 @@
-import { cir } from './circuit.js';
-import { thead, tbody, tt } from './truth-table.js';
+import { cir } from './modules/circuit.js';
+import { thead, tbody, tt } from './modules/truth-table.js';
 
 const DNF = 0;
 const CNF = 1;

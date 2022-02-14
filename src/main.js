@@ -1,6 +1,6 @@
-import { cir } from './circuit.js';
+import { cir } from './modules/circuit.js';
+import { tt } from './modules/truth-table.js';
 import './canvas-event.js';
-import { tt } from './truth-table.js';
 import { DNF, CNF, MINIMIZE, setCircuitForm } from './table-event.js';
 
 document.getElementById('align').addEventListener(
