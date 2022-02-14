@@ -292,17 +292,17 @@ class Circuit extends Array {
             switch(this[i].kind){
                 case 'in':
                 case 'out':
-                    this[i].x = (this[i].gridX + 1) * W;
+                    this[i].x = this[i].gridX * W - (this.nColumn - 1)/2 * W + canvas.width / 2;
                     break;
                 case 'not':
-                    this[i].x = (this[i].gridX + 1) * W + 0.7*Math.sqrt(3)/3 * canvasScale;
+                    this[i].x = this[i].gridX * W + 0.7*Math.sqrt(3)/3 * canvasScale - (this.nColumn - 1)/2 * W + canvas.width / 2;
                     break;
                 case 'and':
                 case 'or':
-                    this[i].x = (this[i].gridX + 1) * W + 0.5 * canvasScale;
+                    this[i].x = this[i].gridX * W + 0.5 * canvasScale - (this.nColumn - 1)/2 * W + canvas.width / 2;
                     break;
             }
-            this[i].y = (this[i].gridY + 1) * H - (nRow[this[i].gridX] + 1)/2 * H + canvas.height / 2;
+            this[i].y = this[i].gridY * H - (nRow[this[i].gridX] - 1)/2 * H + canvas.height / 2;
         }
         this.render();
     }
