@@ -3,7 +3,7 @@ import { thead, tbody, tt } from './truth-table.js';
 
 const DNF = 0;
 const CNF = 1;
-const OPTIMIZE = 2;
+const MINIMIZE = 2;
 
 let CIRCUIT_FORM = DNF;
 
@@ -24,7 +24,7 @@ function makeCirucit(){
             cir.setCircuit(nodeArray, inputArray);
             cir.align(nodeGridPos);
             break;
-        case OPTIMIZE:
+        case MINIMIZE:
             [nodeArray, inputArray] = tt.getDNF();
             cir.setCircuit(nodeArray, inputArray);
             cir.align();
@@ -99,4 +99,4 @@ tbody.addEventListener(
     }
 );
 
-export { DNF, CNF, OPTIMIZE, CIRCUIT_FORM, setCircuitForm };
+export { DNF, CNF, MINIMIZE, CIRCUIT_FORM, setCircuitForm };

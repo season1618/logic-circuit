@@ -1,7 +1,7 @@
 import { cir } from './circuit.js';
 import './edit-circuit.js';
 import { tt } from './truth-table.js';
-import { DNF, CNF, OPTIMIZE, CIRCUIT_FORM, setCircuitForm } from './table-event.js';
+import { DNF, CNF, MINIMIZE, CIRCUIT_FORM, setCircuitForm } from './table-event.js';
 
 //document.getElementById('optimize');
 // let playButton = document.getElementById('play');
