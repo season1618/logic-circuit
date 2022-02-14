@@ -150,7 +150,7 @@ canvas.addEventListener(
     }
 );
 
-let newLogicGate;
+let node;
 let num;
 canvas.addEventListener(
     'dblclick',
@@ -158,8 +158,8 @@ canvas.addEventListener(
         if(state == DEFAULT){
             state = LOGIC_GATE_ADD;
             num = 2;
-            newLogicGate = new Node('not', e.clientX, e.clientY);
-            newLogicGate.render();
+            node = new Node('not', e.clientX, e.clientY);
+            node.render();
         }
     }
 );
@@ -186,23 +186,23 @@ canvas.addEventListener(
                 }
                 switch(num){
                     case 0:
-                        newLogicGate.kind = 'in';
+                        node.kind = 'in';
                         break;
                     case 1:
-                        newLogicGate.kind = 'out';
+                        node.kind = 'out';
                         break;
                     case 2:
-                        newLogicGate.kind = 'not';
+                        node.kind = 'not';
                         break;
                     case 3:
-                        newLogicGate.kind = 'and';
+                        node.kind = 'and';
                         break;
                     case 4:
-                        newLogicGate.kind = 'or';
+                        node.kind = 'or';
                         break;
                 }
                 cir.render();
-                newLogicGate.render();
+                node.render();
                 break;
         }
     }
@@ -212,8 +212,8 @@ canvas.addEventListener(
     'click',
     function(e){
         if(state == LOGIC_GATE_ADD){
-            if(newLogicGate.include(e.clientX, e.clientY)){
-                cir.add(newLogicGate);
+            if(node.include(e.clientX, e.clientY)){
+                cir.add(node);
                 state = DEFAULT;
             }else{
                 cir.render();
