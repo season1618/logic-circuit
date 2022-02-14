@@ -309,32 +309,26 @@ class Circuit extends Array {
     
     render(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let isUsed = new Array(Math.floor(canvas.width / (canvasScale/10))).fill(false);
         for(let i = 0; i < this.length; i++){
             this[i].render();
             let n = this[i].input.length;
             let k = 0;
             for(let g of this[i].input){
-                let r = Math.random();
+                let wireTurnY = Math.floor((this[i].left() - 0.2*canvasScale) / (canvasScale/10));
+                for(; wireTurnY >= 0; wireTurnY--){
+                    if(!isUsed[wireTurnY]){
+                        isUsed[wireTurnY] = true;
+                        break;
+                    }
+                }
+                wireTurnY *= canvasScale / 10;
                 k++;
                 ctx.beginPath();
                 ctx.moveTo(g.x, g.y);
-                ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), g.y);
-                
-                switch(this[i].kind){
-                    case 'out':
-                        ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), this[i].y);
-                        ctx.lineTo(this[i].x, this[i].y);
-                        break;
-                    case 'not':
-                        ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), this[i].y - 0.35*canvasScale + k/(n+1)*0.7*canvasScale);
-                        ctx.lineTo(this[i].x - (0.7*1.73/2 + 0.16) * canvasScale, this[i].y - 0.35*canvasScale + k/(n+1)*0.7*canvasScale);
-                        break;
-                    case 'and':
-                    case 'or':
-                        ctx.lineTo(g.x * r + (this[i].x - canvasScale) * (1 - r), this[i].y - 0.4*canvasScale + k/(n+1)*0.8*canvasScale);
-                        ctx.lineTo(this[i].x - canvasScale, this[i].y - 0.4*canvasScale + k/(n+1)*0.8*canvasScale);
-                        break;
-                }
+                ctx.lineTo(wireTurnY, g.y);
+                ctx.lineTo(wireTurnY, this[i].y - this[i].height()/2 + k/(n+1)*this[i].height());
+                ctx.lineTo(this[i].left(), this[i].y - this[i].height()/2 + k/(n+1)*this[i].height());
                 ctx.stroke();
             }
         }
