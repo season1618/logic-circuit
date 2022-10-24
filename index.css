@@ -9,8 +9,13 @@ body {
     margin: 0;
     overflow: hidden;
 
-    font-family: 'Yu Gothic Light', sans-serif;
+    font-family: Courier, "游明朝", monospace;
     font-weight: lighter;
+}
+
+canvas {
+    /* position: absolute; */
+    background-color: rgb(230, 230, 230);
 }
 
 #operate {
@@ -18,46 +23,66 @@ body {
     left: 20px;
     top: 20px;
 }
+
 button {
     box-sizing: border-box;
     width: 100px;
+    height: 30px;
 
-    border-radius: 2rem;
+    border-radius: 0.5rem;
+    border-style: none;
     border-width: thin;
-    background-color: transparent;
+    background-color: rgb(100, 200, 100);
 
-    font-family: 'Yu Gothic Light', sans-serif;
+    font-family: Courier, "游明朝", monospace, 'Yu Gothic Light', sans-serif;
     font-size: 1.5rem;
-    font-weight: lighter;
+    font-weight: bold;
 
     margin-top: 5px;
 }
 
-table {
-    display: block;
-    background: white;
+button:hover {
+    background-color: rgb(110, 210, 110);
+}
 
+#tablearea {
+    background-color: white;
     position: absolute;
     top: 0;
+    bottom: 0;
     right: 0;
+}
+
+table {
+    display: block;
+
+    margin-left: 30px;
+    margin-bottom: 10px;
 
     max-height: 100%;
     
     resize: block;
     overflow-y: scroll;
 
-    border: 1px solid;
+    border-style: none;
+    border-width: 1px;
     border-spacing: 0;
-}
-
-th, td {
-    width: 50px;
-    border: 1px solid;
-    text-align: center;
 }
 
 thead {
     position: sticky;
     top: 0;
     background: white;
+}
+
+th, td {
+    width: 50px;
+
+    border-color:rgb(170, 170, 170);
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom-style: solid;
+    border-width: 1px;
+
+    text-align: center;
 }
