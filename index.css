@@ -14,7 +14,6 @@ body {
 }
 
 canvas {
-    /* position: absolute; */
     background-color: rgb(230, 230, 230);
 }
 
@@ -34,7 +33,7 @@ button {
     border-width: thin;
     background-color: rgb(100, 200, 100);
 
-    font-family: Courier, "游明朝", monospace, 'Yu Gothic Light', sans-serif;
+    font-family: Courier, "游明朝", monospace;
     font-size: 1.5rem;
     font-weight: bold;
 
@@ -57,7 +56,6 @@ table {
     display: block;
 
     margin-left: 30px;
-    margin-bottom: 10px;
 
     max-height: 100%;
     

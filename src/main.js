@@ -3,15 +3,6 @@ import { tt } from './modules/truth-table.js';
 import './canvas-event.js';
 import { DNF, CNF, MINIMIZE, setCircuitForm } from './table-event.js';
 
-document.getElementById('align').addEventListener(
-    'click',
-    function(){
-        cir.align();
-        cir.render();
-        tt.setTable(...cir.getTruthTable());
-    }
-);
-
 document.getElementById('dnf').addEventListener(
     'click',
     function(){
@@ -34,7 +25,7 @@ document.getElementById('cnf').addEventListener(
     }
 );
 
-document.getElementById('minimize').addEventListener(
+document.getElementById('min').addEventListener(
     'click',
     function(){
         setCircuitForm(MINIMIZE);
@@ -45,7 +36,16 @@ document.getElementById('minimize').addEventListener(
             cir.render();
         }
     }
-)
+);
+
+document.getElementById('align').addEventListener(
+    'click',
+    function(){
+        cir.align();
+        cir.render();
+        tt.setTable(...cir.getTruthTable());
+    }
+);
 
 document.getElementById('png').addEventListener(
     'click',
